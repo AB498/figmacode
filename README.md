@@ -14,7 +14,8 @@ npm i -g figmacode
 figmacode auth <token>
 ```
 
-Get the token from the CodeConvert Figma plugin (the account menu shows `npx -y figmacode auth <token>`).
+Get the token from the CodeConvert Figma plugin (the account menu shows `npx -y figmacode auth <token>`):
+https://www.figma.com/community/plugin/1618553111789925879
 Requires the plugin to be **open** in Figma for `generate`, `pages`, and `eval` to work.
 
 ## Commands
