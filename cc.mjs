@@ -86,14 +86,18 @@ if (cmd === "generate") {
 
 if (cmd === "pages") {
   const cfg = authGuard(); if (!cfg) process.exit(0);
-  const code = "(async()=>{if(figma.loadAllPagesAsync)await figma.loadAllPagesAsync();return figma.root.children.map(p=>({id:p.id,name:p.name,current:p.id===figma.currentPage.id}))})()"; // pages = figma.root.children
+  const code = "(async()=>{if(figma.loadAllPagesAsync)await figma.loadAllPagesAsync();return figma.root.children.map(p=>({id:p.id,name:p.name,current:p.id===figma.currentPage.id,frames:p.children.filter(n=>n.type==='FRAME').map(f=>({id:f.id,name:f.name}))}))})()"; // pages + top-level FRAME children
   try {
     const { requestId } = await client.mutation("action:submit", { token: cfg.token, type: "eval", code });
     process.stdout.write("[CC] Listing pages");
     const pages = await fetchResultJson(cfg.token, requestId);
     if (!Array.isArray(pages)) throw new Error("Unexpected result (is the plugin open?)");
     console.log(`[CC] ${pages.length} page(s):`);
-    for (const p of pages) console.log(`  ${p.current ? "*" : " "} ${p.name}  (${p.id})`); // * marks current page
+    for (const p of pages) { // * marks current page; indent top-level frames beneath each page
+      console.log(`  ${p.current ? "*" : " "} ${p.name}  (${p.id})`);
+      for (const f of (p.frames || [])) console.log(`      - ${f.name}  (${f.id})`);
+      if (!(p.frames || []).length) console.log("      (no top-level frames)");
+    }
   } catch (e) { console.error("[CC] Pages failed:", e.message); process.exitCode = 1; }
   process.exit(0);
 }
