@@ -47,14 +47,30 @@ const fetchResultText = async (token, requestId) => {
   return fetch(res.storageUrl).then(r => { if (!r.ok) throw new Error(`Storage fetch ${r.status}`); return r.text(); });
 };
 
-if (!cmd) {
+const printHelp = () => {
+  console.log("figmacode — authenticate and drive the CodeConvert Figma plugin from the CLI");
+  console.log("");
+  console.log("Usage: figmacode <command> [args]");
+  console.log("");
   console.log("Commands:");
-  console.log("  auth <token>                    Authenticate with session token");
-  console.log("  generate <selection|url|node-id> [out]  Export design from the Figma plugin");
-  console.log("  pages                           List all pages in the Figma file");
-  console.log("  eval <code> [--out file]        Run eval code in the Figma plugin");
-  process.exit(0);
-}
+  console.log("  auth <token>                              Authenticate with a session token");
+  console.log("  generate <selection|url|node-id> [out]    Export design -> HTML/JSX (out .jsx/.tsx = component)");
+  console.log("  pages                                     List all pages + top-level frames in the file");
+  console.log("  eval <code> [--out file]                  Run JS in the Figma sandbox, return JSON");
+  console.log("  --help                                    Show this help");
+  console.log("");
+  console.log("Examples:");
+  console.log('  npx -y figmacode auth <token>');
+  console.log('  npx -y figmacode generate selection index.html');
+  console.log('  npx -y figmacode generate 355-1581 out.html');
+  console.log('  npx -y figmacode generate "https://www.figma.com/design/.../?node-id=355-1581" out.html');
+  console.log('  npx -y figmacode pages');
+  console.log('  npx -y figmacode eval "figma.currentPage.name"');
+  console.log("");
+  console.log("Requires the Figma plugin (CodeConvert) to be open. Config stored at ~/.cc/config.json");
+};
+
+if (!cmd || cmd === "--help" || cmd === "-h") { printHelp(); process.exit(0); }
 
 if (cmd === "auth") {
   const token = process.argv[3];
