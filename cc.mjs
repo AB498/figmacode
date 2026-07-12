@@ -50,7 +50,7 @@ const fetchResultText = async (token, requestId) => {
 if (!cmd) {
   console.log("Commands:");
   console.log("  auth <token>                    Authenticate with session token");
-  console.log("  generate <selection|page> [out] Export design from the Figma plugin");
+  console.log("  generate <selection|url|node-id> [out]  Export design from the Figma plugin");
   console.log("  pages                           List all pages in the Figma file");
   console.log("  eval <code> [--out file]        Run eval code in the Figma plugin");
   process.exit(0);
@@ -68,15 +68,24 @@ if (cmd === "auth") {
   process.exit(0);
 }
 
+const parseNodeRef = s => {                                                             // figma url | 355-1581 | 355:1581 -> "355:1581" | null
+  const m = s.match(/node-id=([^&\s]+)/);                                               // pull node-id param from a figma url
+  const id = (m ? decodeURIComponent(m[1]) : s).trim().replace(/-/g, ":");              // figma urls encode ':' as '-'
+  return /^I?\d+:\d+/.test(id) ? id : null;                                             // valid node id else null
+};
+
 if (cmd === "generate") {
   const cfg = authGuard(); if (!cfg) process.exit(0);
-  const target = process.argv[3];
+  const ref = process.argv[3];
   const outFile = process.argv[4] || null;
-  if (!["selection", "page"].includes(target)) { console.error("[CC] Usage: cc generate <selection|page> [outfile]"); process.exitCode = 1; process.exit(0); }
+  if (!ref) { console.error("[CC] Usage: cc generate <selection|url|node-id> [outfile]"); process.exitCode = 1; process.exit(0); }
+  const nodeId = ref === "selection" ? null : parseNodeRef(ref);                        // null = current selection
+  if (ref !== "selection" && !nodeId) { console.error(`[CC] Invalid target: ${ref} (use 'selection', a figma url, or a node id like 355-1581)`); process.exitCode = 1; process.exit(0); }
   const format = outFile ? (outFile.endsWith(".jsx") || outFile.endsWith(".tsx") ? "component" : "react") : "react"; // .jsx/.tsx -> component, else static html
+  const label = nodeId || "selection";
   try {
-    const { requestId } = await client.mutation("action:submit", { token: cfg.token, type: "generate", code: JSON.stringify({ target, format }) });
-    process.stdout.write(`[CC] Generating ${target} -> ${format}`);
+    const { requestId } = await client.mutation("action:submit", { token: cfg.token, type: "generate", code: JSON.stringify({ nodeId, format }) });
+    process.stdout.write(`[CC] Generating ${label} -> ${format}`);
     const html = await fetchResultText(cfg.token, requestId);
     if (outFile) { writeFileSync(outFile, html); console.log(`[CC] Written to ${outFile} (${html.length} chars)`); }
     else console.log(html);
