@@ -9,9 +9,9 @@ CLI to authenticate and drive the CodeConvert Figma plugin from the terminal —
 npx -y figmacode auth <token>
 npx -y figmacode generate selection index.html
 
-# or install globally (bin is `cc`)
+# or install globally (bin is `figmacode`)
 npm i -g figmacode
-cc auth <token>
+figmacode auth <token>
 ```
 
 Get the token from the CodeConvert Figma plugin (the account menu shows `npx -y figmacode auth <token>`).
