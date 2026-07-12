@@ -1,6 +1,6 @@
 {
   "name": "figmacode",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "CLI to authenticate and run eval code via the CodeConvert Convex backend",
   "type": "module",
   "bin": {
