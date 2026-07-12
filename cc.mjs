@@ -51,6 +51,7 @@ if (!cmd) {
   console.log("Commands:");
   console.log("  auth <token>                    Authenticate with session token");
   console.log("  generate <selection|page> [out] Export design from the Figma plugin");
+  console.log("  pages                           List all pages in the Figma file");
   console.log("  eval <code> [--out file]        Run eval code in the Figma plugin");
   process.exit(0);
 }
@@ -80,6 +81,20 @@ if (cmd === "generate") {
     if (outFile) { writeFileSync(outFile, html); console.log(`[CC] Written to ${outFile} (${html.length} chars)`); }
     else console.log(html);
   } catch (e) { console.error("[CC] Generate failed:", e.message); process.exitCode = 1; }
+  process.exit(0);
+}
+
+if (cmd === "pages") {
+  const cfg = authGuard(); if (!cfg) process.exit(0);
+  const code = "(async()=>{if(figma.loadAllPagesAsync)await figma.loadAllPagesAsync();return figma.root.children.map(p=>({id:p.id,name:p.name,current:p.id===figma.currentPage.id}))})()"; // pages = figma.root.children
+  try {
+    const { requestId } = await client.mutation("action:submit", { token: cfg.token, type: "eval", code });
+    process.stdout.write("[CC] Listing pages");
+    const pages = await fetchResultJson(cfg.token, requestId);
+    if (!Array.isArray(pages)) throw new Error("Unexpected result (is the plugin open?)");
+    console.log(`[CC] ${pages.length} page(s):`);
+    for (const p of pages) console.log(`  ${p.current ? "*" : " "} ${p.name}  (${p.id})`); // * marks current page
+  } catch (e) { console.error("[CC] Pages failed:", e.message); process.exitCode = 1; }
   process.exit(0);
 }
 
