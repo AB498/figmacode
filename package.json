@@ -1,0 +1,28 @@
+{
+  "name": "figmacode",
+  "version": "1.0.2",
+  "description": "CLI to authenticate and run eval code via the CodeConvert Convex backend",
+  "type": "module",
+  "bin": {
+    "figmacode": "cc.mjs",
+    "cc": "cc.mjs",
+    "fc": "cc.mjs"
+  },
+  "files": [
+    "cc.mjs"
+  ],
+  "keywords": [
+    "cli",
+    "codeconvert",
+    "convex",
+    "eval"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "convex": "^1.17.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
