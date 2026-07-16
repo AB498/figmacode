@@ -228,9 +228,13 @@ const runStage = async (cfg, sections, idx, stage) => {
     const rawText = await geminiRes.text();
     const body = JSON.parse(rawText);
     const inner = body.text || rawText;
-    const fenced = inner.replace(/^```(?:html|jsx|tsx|javascript|js)?\s*/i, "").replace(/```\s*$/i, "").trim();
+    const fragment = inner.replace(/^```(?:html|jsx|tsx|javascript|js)?\s*/i, "").replace(/```\s*$/i, "").trim();
     const respPath = join(CC_CACHE, `${idx}-resp.html`);
-    writeFileSync(respPath, fenced || inner);
+    const injected = html.replace(
+      /(return\s*\()\s*(<>[\s\S]*?<\/>)\s*(\);)/,
+      (_, pre, _mid, post) => `${pre}\n${fragment}\n${post}`
+    );
+    writeFileSync(respPath, injected === html ? (fragment || inner) : injected);
     console.log(`\n[CC] Written ${respPath}`);
     s.state.resp = true;
   }
