@@ -19,7 +19,7 @@
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    
+    <script>!function(){var S=[],f,c,a,mx=0,my=0;function toast(m){var t=document.getElementById('fdb-t');if(!t){t=document.createElement('div');t.id='fdb-t';t.style.cssText='position:fixed;background:#1a1a2e;color:white;padding:8px 16px;border-radius:6px;font-family:monospace;font-size:13px;z-index:100001;transition:opacity 0.3s;pointer-events:none';document.body.appendChild(t)}t.textContent=m;t.style.left=mx+'px';t.style.top=my+'px';t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(function(){t.style.opacity='0'},1500)};document.addEventListener('mousemove',function(e){mx=e.clientX+20;my=e.clientY+20});function g(){c||(c=function(){var d=document.createElement('div');d.id='fdb-s';d.style.cssText='position:absolute;pointer-events:none;z-index:99998;top:0;left:0;width:100%;min-height:100vh';document.body.appendChild(d);return d}());c.textContent='';if(!S.length){a&&(a.style.display='none');toast('Cleared all');return}var h='',sx=window.scrollX,sy=window.scrollY;S.forEach(function(e){var b=e.getBoundingClientRect();h+='<div style="position:absolute;left:'+(b.left+sx)+'px;top:'+(b.top+sy)+'px;width:'+b.width+'px;height:'+b.height+'px;border:2px solid #10b981;background:rgba(16,185,129,0.08);box-sizing:border-box"></div><div style="position:absolute;left:'+(b.left+sx+2)+'px;top:'+(b.top+sy+2)+'px;white-space:nowrap;background:#10b981;color:white;font-size:10px;font-family:monospace;font-weight:700;padding:1px 4px;border-radius:3px;line-height:14px">'+Math.round(b.width)+'×'+Math.round(b.height)+'</div>'});if(S.length==2){var b1=S[0].getBoundingClientRect(),b2=S[1].getBoundingClientRect(),c1=b1.left<=b2.left&&b1.top<=b2.top&&b1.right>=b2.right&&b1.bottom>=b2.bottom,c2=b2.left<=b1.left&&b2.top<=b1.top&&b2.right>=b1.right&&b2.bottom>=b1.bottom;if(c1||c2){var out=c1?b1:b2,inn=c1?b2:b1,ox=out.left+sx,oy=out.top+sy,ix=inn.left+sx,iy=inn.top+sy,icx=ix+inn.width/2,icy=iy+inn.height/2,td=Math.round(inn.top-out.top),bd=Math.round(out.bottom-inn.bottom),ld=Math.round(inn.left-out.left),rd=Math.round(out.right-inn.right);var ww=window.innerWidth,wh=window.innerHeight,cl=function(v,m,M){return v<m?m:v>M?M:v},clx=cl((ox+ix)/2,sx+24,sx+ww-24),cly=cl(icy,sy+14,sy+wh-14),crx=cl((ix+inn.width+ox+out.width)/2,sx+24,sx+ww-24),ctx=cl(icx,sx+24,sx+ww-24),cty=cl((oy+iy)/2,sy+14,sy+wh-14),cby=cl((iy+inn.height+oy+out.height)/2,sy+14,sy+wh-14);h+='<svg style="position:absolute;top:0;left:0;width:100%;height:100%;overflow:visible"><line x1="'+ox+'" y1="'+icy+'" x2="'+ix+'" y2="'+icy+'" stroke="#10b981" stroke-width="1" stroke-dasharray="4,3"/><rect x="'+(clx-16)+'" y="'+(cly-10)+'" width="32" height="20" rx="4" fill="#10b981"/><text x="'+clx+'" y="'+(cly+5)+'" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="monospace">'+ld+'</text><line x1="'+(ix+inn.width)+'" y1="'+icy+'" x2="'+(ox+out.width)+'" y2="'+icy+'" stroke="#10b981" stroke-width="1" stroke-dasharray="4,3"/><rect x="'+(crx-16)+'" y="'+(cly-10)+'" width="32" height="20" rx="4" fill="#10b981"/><text x="'+crx+'" y="'+(cly+5)+'" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="monospace">'+rd+'</text><line x1="'+icx+'" y1="'+oy+'" x2="'+icx+'" y2="'+iy+'" stroke="#10b981" stroke-width="1" stroke-dasharray="4,3"/><rect x="'+(ctx-16)+'" y="'+(cty-10)+'" width="32" height="20" rx="4" fill="#10b981"/><text x="'+ctx+'" y="'+(cty+5)+'" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="monospace">'+td+'</text><line x1="'+icx+'" y1="'+(iy+inn.height)+'" x2="'+icx+'" y2="'+(oy+out.height)+'" stroke="#10b981" stroke-width="1" stroke-dasharray="4,3"/><rect x="'+(ctx-16)+'" y="'+(cby-10)+'" width="32" height="20" rx="4" fill="#10b981"/><text x="'+ctx+'" y="'+(cby+5)+'" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="monospace">'+bd+'</text></svg>'}else{var l=b1.left<b2.left?b1:b2,R=b1.left<b2.left?b2:b1,t=b1.top<b2.top?b1:b2,B=b1.top<b2.top?b2:b1,hx=l.right+sx,hy=Math.max(l.bottom,R.bottom)+15+sy,hx2=R.left+sx,vx=Math.max(l.right,R.right)+15+sx,vy=t.bottom+sy,vy2=B.top+sy;var ww=window.innerWidth,wh=window.innerHeight,cl=function(v,m,M){return v<m?m:v>M?M:v},chx=cl((hx+hx2)/2,sx+24,sx+ww-24),chy=cl(hy,sy+14,sy+wh-14),cvx=cl(vx,sx+24,sx+ww-24),cvy=cl((vy+vy2)/2,sy+14,sy+wh-14);h+='<svg style="position:absolute;top:0;left:0;width:100%;height:100%;overflow:visible"><line x1="'+hx+'" y1="'+hy+'" x2="'+hx2+'" y2="'+hy+'" stroke="#10b981" stroke-width="1" stroke-dasharray="4,3"/><rect x="'+(chx-20)+'" y="'+(chy-10)+'" width="40" height="20" rx="4" fill="#10b981"/><text x="'+(hx+hx2)/2+'" y="'+(chy+5)+'" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="monospace">'+Math.round(R.left-l.right)+'</text><line x1="'+vx+'" y1="'+vy+'" x2="'+vx+'" y2="'+vy2+'" stroke="#10b981" stroke-width="1" stroke-dasharray="4,3"/><rect x="'+(cvx-20)+'" y="'+(cvy-10)+'" width="40" height="20" rx="4" fill="#10b981"/><text x="'+vx+'" y="'+(cvy+5)+'" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="monospace">'+Math.round(B.top-t.bottom)+'</text></svg>'}}c.innerHTML=h}document.addEventListener('mouseover',function(e){var t=e.target.closest('[data-figma-node-id]');f=f||function(){var d=document.createElement('div');d.id='fdb';d.style.cssText='position:absolute;pointer-events:none;z-index:99999;border:5px solid rgba(239,68,68,0.7);background:rgba(239,68,68,0.05)';document.body.appendChild(d);return d}();if(t===(f._el||null))return;f._el=t;if(!t){f.style.display='none';return}var r=t.getBoundingClientRect(),sx=window.scrollX,sy=window.scrollY;f.style.display='block';f.style.left=r.left+sx+'px';f.style.top=r.top+sy+'px';f.style.width=r.width+'px';f.style.height=r.height+'px'});document.addEventListener('mouseleave',function(e){f&&(f.style.display='none',f._el=null)});document.addEventListener('click',function(e){var t=e.target.closest('[data-figma-node-id]');if(!t)return;var i=S.indexOf(t);if(i>=0){S.splice(i,1);g();return}S.push(t);g()});document.addEventListener('keydown',function(e){if(e.key==='Escape'&&S.length){S.pop();g()}else if((e.ctrlKey||e.metaKey)&&e.key==='c'&&S.length){e.preventDefault();toast('Copied');navigator.clipboard.writeText(S.map(x=>x.outerHTML).join(''))}})}();</script>
 </head>
 <body class="m-0 overflow-auto bg-[#f5f5f5] relative">
     <div id="root"></div>
@@ -27,82 +27,78 @@
         function App() {
             return (
                 <>
-<>
-      <div className="relative w-full max-w-[1920px] mx-auto bg-[#f5f5f5] overflow-hidden">
-        <div className="relative w-full min-h-[1032px] bg-no-repeat bg-cover bg-center" style={{ backgroundImage: "url('https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/actions/e7dab53c-ed7b-4691-be0f-9e147cece092')" }}>
-          
-          <header className="w-full xl:h-[120px] flex items-center px-6 xl:px-[250px]">
-            <div className="flex-1 flex items-center justify-between py-6 xl:py-0">
-              <div className="w-[140px] xl:w-[196px] h-[30px] xl:h-[40px] bg-no-repeat bg-contain" style={{ backgroundImage: "url('https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/actions/50eacdee-bdca-4c0e-b385-f8bd94bc235e')" }} />
-              
-              <nav className="hidden xl:flex items-center gap-8 bg-white px-8 py-4 rounded-[100px] shadow-[0px_2px_20px_rgba(0,0,0,0.1)]">
-                {["Home", "About", "Services", "Case study", "Contact Us"].map((item) => (
-                  <a key={item} href="#" className="text-[18px] font-normal text-[#060606] font-['Inter']">{item}</a>
-                ))}
-              </nav>
+<div className="w-full max-w-[1920px] mx-auto bg-[#f5f5f5] px-4 xl:px-[250px] py-10 xl:py-[200px]">
+  <header className="fixed top-0 left-0 w-full z-50 px-4 xl:px-[250px] pt-6">
+    <div className="flex items-center justify-between bg-white/80 backdrop-blur-md p-4 xl:p-0 xl:bg-transparent xl:backdrop-blur-none rounded-2xl xl:rounded-none">
+      <div className="w-[120px] xl:w-[196px] h-[24px] xl:h-[40px] bg-no-repeat bg-contain" style={{ backgroundImage: "url('https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/actions/dd3d0516-34fc-4d3b-935f-48e383768a9e')" }} />
+      <nav className="hidden xl:flex items-center gap-8 bg-white px-10 py-6 rounded-[100px] shadow-[0px_2px_20px_rgba(0,0,0,0.1)]">
+        {['Home', 'About', 'Services', 'Case study', 'Contact Us'].map((item) => (
+          <a key={item} href="#" className="text-[18px] font-normal text-[#060606] font-['Inter']">{item}</a>
+        ))}
+      </nav>
+      <div className="hidden xl:flex items-center gap-2 bg-[#0271e8] px-6 py-3 rounded-[8px] text-white font-medium">
+        <div className="w-[20px] h-[20px] bg-no-repeat bg-contain" style={{ backgroundImage: "url('https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/actions/e5d399c7-fed5-493f-94c5-6116a72a0db5')" }} />
+        <span>+8801404282727</span>
+      </div>
+    </div>
+  </header>
 
-              <div className="hidden xl:flex items-center gap-2 bg-[#0271e8] px-6 py-3 rounded-[8px] text-white">
-                <div className="w-[20px] h-[20px] bg-no-repeat bg-contain" style={{ backgroundImage: "url('https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/actions/4aa714a5-d5b1-4b99-ae02-a6632b06a091')" }} />
-                <span className="text-[18px] font-medium font-['Inter']">+8801404282727</span>
-              </div>
-            </div>
-          </header>
+  <main className="flex flex-col xl:flex-row gap-16 xl:gap-[56px]">
+    <section className="flex-1 xl:max-w-[764px]">
+      <div className="inline-flex items-center gap-2 bg-[#dcedff] px-4 py-2 rounded-full text-[#0271e8] text-[14px] font-medium font-['Inter']">
+        <span>GEO</span><span>·</span><span>AEO</span><span>·</span><span>AI Overviews</span><span>·</span><span>LLM Visibility</span>
+      </div>
+      <h1 className="mt-6 text-[40px] xl:text-[80px] font-extrabold leading-[1.1] xl:leading-[96px] text-[#060606] font-['DM_Sans'] tracking-[-0.02em]">
+        AI SEO Services: Get Your Brand Cited by <span className="text-[#0271e8]">ChatGPT, Gemini, and Google AI</span>
+      </h1>
+      <p className="mt-6 text-[16px] xl:text-[18px] leading-[27px] text-[#566476] font-['Inter']">
+        AI SEO services optimise your business for visibility in AI-generated answers, covering generative engine optimization (GEO) for ChatGPT, Perplexity, and Gemini, answer engine optimization (AEO) for direct-answer queries, and Google AI Overview rankings. Khan IT builds the structured content, entity signals, and third-party citations AI engines check before recommending any brand, included in every SEO campaign we run.
+      </p>
+      <div className="mt-10 flex flex-wrap gap-4">
+        <button className="bg-[#0271e8] text-white px-8 py-4 rounded-[8px] font-medium">Check If AI Engines Mention Your Brand</button>
+        <button className="text-[#0271e8] border border-[#0271e8] px-8 py-4 rounded-[8px] font-medium">See Our Pricing</button>
+      </div>
+      <div className="mt-12 flex flex-wrap gap-3">
+        {['Practising GEO Since 2025', 'Wikipedia Entity Work Verified on Clutch', 'BASIS Registered'].map((tag) => (
+          <span key={tag} className="px-4 py-1 rounded-full bg-[#f0f7ff] border border-[#cce5ff] text-[#0271e8] text-[12px] font-medium">{tag}</span>
+        ))}
+      </div>
+    </section>
 
-          <main className="px-6 xl:px-[250px] pt-10 xl:pt-[80px] flex flex-col xl:flex-row gap-12 xl:gap-0">
-            <div className="flex-1 xl:max-w-[764px]">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#dcedff] text-[#0271e8] text-[14px] font-medium font-['Inter'] mb-6">
-                GEO · AEO · AI Overviews · LLM Visibility
-              </div>
-              
-              <h1 className="text-[40px] xl:text-[80px] font-extrabold leading-[1.1] xl:leading-[96px] text-[#060606] font-['DM_Sans'] mb-6">
-                AI SEO Services: Get Your Brand Cited by <span className="text-[#0271e8]">ChatGPT, Gemini, and Google AI</span>
-              </h1>
-              
-              <p className="text-[16px] xl:text-[18px] leading-[27px] text-[#566476] font-['Inter'] mb-8">
-                AI SEO services optimise your business for visibility in AI-generated answers, covering generative engine optimization (GEO) for ChatGPT, Perplexity, and Gemini, answer engine optimization (AEO) for direct-answer queries, and Google AI Overview rankings. Khan IT builds the structured content, entity signals, and third-party citations AI engines check before recommending any brand, included in every SEO campaign we run.
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-4 mb-12">
-                <button className="bg-[#0271e8] text-white px-6 py-4 rounded-[8px] font-medium font-['Inter']">Check If AI Engines Mention Your Brand</button>
-                <button className="border border-[#0271e8] text-[#0271e8] px-6 py-4 rounded-[8px] font-medium font-['Inter']">See Our Pricing</button>
-              </div>
-
-              <div className="flex flex-wrap gap-3">
-                {["Practising GEO Since 2025", "Wikipedia Entity Work Verified on Clutch", "BASIS Registered"].map((tag) => (
-                  <div key={tag} className="px-4 py-2 rounded-full bg-[#f0f7ff] border border-[#cce5ff] text-[#0271e8] text-[12px] font-medium font-['Inter']">
-                    {tag}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="xl:flex-1 relative xl:ml-[56px] mt-10 xl:mt-0">
-              <div className="bg-white p-6 rounded-[24px] shadow-[0px_1px_0px_rgba(15,23,42,0.04)] border border-[#e2e8f0]">
-                <div className="flex justify-between items-center mb-6">
-                  <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-[#f0f7ff] text-[#0271e8] text-[11px] font-semibold uppercase tracking-wider">
-                    Verified Entity Work
-                  </div>
-                </div>
-                <div className="p-4 bg-[#f8fafc] rounded-[16px] border border-[#f1f5f9] mb-6">
-                  <p className="text-[11px] font-semibold text-[#94a3b8] uppercase mb-2">Client</p>
-                  <div className="h-[32px] bg-no-repeat bg-contain" style={{ backgroundImage: "url('https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/actions/64475b11-bdb7-45b3-8431-a330dbc7fe48')" }} />
-                </div>
-                <p className="text-[16px] text-[#566476] font-['Inter'] mb-6">
-                  We researched, drafted, and published IFAD Group's Wikipedia presence, the highest-authority entity source AI engines cite.
-                </p>
-                <div className="p-5 bg-[#f0f7ff] border border-[#0271e8]/20 rounded-[16px]">
-                  <p className="text-[11px] font-semibold text-[#353535] uppercase mb-2">Metric</p>
-                  <h3 className="text-[24px] font-semibold text-[#0271e8] font-['DM_Sans'] mb-2">Dual-language Wikipedia pages</h3>
-                  <div className="flex items-center gap-2 text-[14px] text-[#566476]">
-                    <div className="w-2 h-2 rounded-full bg-emerald-400" /> Live and maintained
-                  </div>
-                </div>
-              </div>
-            </div>
-          </main>
+    <aside className="relative xl:flex-1 xl:max-w-[509px]">
+      <div className="bg-white p-6 rounded-[24px] shadow-sm border border-[#e2e8f0] relative">
+        <div className="flex justify-between items-center mb-6">
+          <div className="flex items-center gap-2 bg-[#f0f7ff] px-3 py-1 rounded-full text-[#0271e8] text-[11px] font-semibold uppercase tracking-wider">
+            <div className="w-[14px] h-[14px] bg-no-repeat bg-contain" style={{ backgroundImage: "url('https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/actions/3918ed55-f8b2-4712-8ae5-80a79b1de477')" }} />
+            Verified Entity Work
+          </div>
+        </div>
+        <div className="bg-[#f8fafc] p-4 rounded-[16px] border border-[#f1f5f9] mb-6">
+          <p className="text-[11px] font-semibold text-[#94a3b8] uppercase">Client</p>
+          <div className="w-[80px] h-[30px] bg-no-repeat bg-contain mt-2" style={{ backgroundImage: "url('https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/actions/0ffdf071-ca20-468d-8164-d67dd4c1e10b')" }} />
+        </div>
+        <p className="text-[16px] text-[#566476] leading-[24px] mb-6">
+          We researched, drafted, and published IFAD Group's Wikipedia presence, the highest-authority entity source AI engines cite.
+        </p>
+        <div className="bg-[#f0f7ff] p-5 rounded-[16px] border border-[#0271e8]/20">
+          <p className="text-[11px] font-semibold uppercase text-[#353535]">Metric</p>
+          <h3 className="text-[24px] font-semibold text-[#0271e8] mt-1">Dual-language Wikipedia pages</h3>
+          <div className="flex items-center gap-2 mt-3 text-[#566476] text-[14px]">
+            <div className="w-2 h-2 rounded-full bg-[#34d399]" />
+            Live and maintained
+          </div>
         </div>
       </div>
-    </>
+      <div className="absolute -top-10 -right-10 bg-white p-4 rounded-[8px] border border-[#e2e8f0] shadow-lg flex items-center gap-3">
+        <div className="w-[28px] h-[28px] bg-no-repeat bg-contain" style={{ backgroundImage: "url('https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/actions/7e3f7e7c-4085-4725-ac92-408fa5ffa761')" }} />
+        <div>
+          <p className="text-[10px] uppercase text-[#94a3b8]">Live</p>
+          <p className="text-[12px] font-semibold">Wikipedia Published</p>
+        </div>
+      </div>
+    </aside>
+  </main>
+</div>
 </>
             );
         }

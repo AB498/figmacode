@@ -234,10 +234,22 @@ const runStage = async (cfg, sections, idx, stage, singleSectionFlag = false) =>
       // Full HTML document from Gemini — use directly
       writeFileSync(respPath, fenced);
     } else {
-      // Gemini returned component source — extract the JSX fragment (<>...</>)
-      const jsxMatch = fenced.match(/(<>[\s\S]*?<\/>)/);
-      const jsx = jsxMatch ? jsxMatch[1] : fenced;
-      const injected = html.replace(/(<>)\s*([\s\S]*?)\s*(<\/>)/, (_, o, __, c) => `${o}\n${jsx}\n${c}`);
+      // Gemini returned component source — extract JSX
+      let jsx = fenced;
+      // Strip function App() { return ( ... ) } wrapper if present
+      const fnStart = fenced.match(/function\s+\w+\s*\(\)\s*\{[\s\S]*?return\s*\(/);
+      if (fnStart) {
+        const body = fenced.slice(fnStart.index + fnStart[0].length);
+        let depth = 1, i = 0;
+        for (; i < body.length && depth > 0; i++) {
+          if (body[i] === '(') depth++;
+          if (body[i] === ')') depth--;
+        }
+        jsx = body.slice(0, i - 1).trim();                       // up to matching close paren
+      }
+      const fragMatch = jsx.match(/(<>[\s\S]*?<\/>)/s);
+      if (fragMatch) jsx = fragMatch[1];
+      const injected = html.replace(/(<>)\s*([\s\S]*?)\s*(<\/>)/s, (_, o, __, c) => `${o}\n${jsx}\n${c}`);
       writeFileSync(respPath, injected);
     }
     console.log(`\n[CC] Written ${respPath}`);
