@@ -56,6 +56,7 @@ const printHelp = () => {
   console.log("  auth <token>                              Authenticate with a session token");
   console.log("  generate <selection|url|node-id> [out]    Export design -> HTML/JSX (out .jsx/.tsx = component)");
   console.log("  pages                                     List all pages + top-level frames in the file");
+  console.log("  tree [out.md]                             Generate a markdown sections grid with checkboxes");
   console.log("  eval <code> [--out file]                  Run JS in the Figma sandbox, return JSON");
   console.log("  --help                                    Show this help");
   console.log("");
@@ -124,6 +125,111 @@ if (cmd === "pages") {
       if (!(p.frames || []).length) console.log("      (no top-level frames)");
     }
   } catch (e) { console.error("[CC] Pages failed:", e.message); process.exitCode = 1; }
+  process.exit(0);
+}
+
+const nodeBBox = n => (
+  n.absoluteBoundingBox ? { x: n.absoluteBoundingBox.x, y: n.absoluteBoundingBox.y, width: n.absoluteBoundingBox.width, height: n.absoluteBoundingBox.height }
+    : (Number.isFinite(n.x) && Number.isFinite(n.y) ? { x: n.x, y: n.y, width: n.width || 0, height: n.height || 0 } : null)
+);
+const badName = /^(Frame \d+|Group \d+|Main Container|Container|Background Container?|Mask Group|Section|Content|Wrapper|Inner|Holder)$/i;
+const hasTextContent = node => {
+  if (!node || typeof node !== "object") return false;
+  if (node.content || node.characters || node.textContent) return true;
+  if (Array.isArray(node.children)) return node.children.some(hasTextContent);
+  return false;
+};
+const enrichSectionTree = (node, rootBbox, depth = 0, maxDepth = 12) => {
+  if (!node || typeof node !== "object") return null;
+  const textContent = node.content || node.characters || node.textContent || "";
+  const abs = nodeBBox(node);
+  const bbox = abs && (depth <= 2 || textContent) ? [+(abs.x - (rootBbox?.x || 0)).toFixed(1), +(abs.y - (rootBbox?.y || 0)).toFixed(1), +abs.width.toFixed(1), +abs.height.toFixed(1)] : null;
+  const name = depth <= 1 && !badName.test(node.name) ? node.name : null;
+  const tc = textContent || null;
+  let kids = null;
+  if (depth < maxDepth && Array.isArray(node.children) && node.children.length) {
+    let flat = depth === 0 ? [].concat(...node.children.map(c => c.type === "GROUP" && Array.isArray(c.children) ? c.children : [c])) : node.children;
+    const filtered = flat.filter(c => hasTextContent(c));
+    filtered.sort((a, b) => ((nodeBBox(a)?.y || 0) - (nodeBBox(b)?.y || 0)) || ((nodeBBox(a)?.x || 0) - (nodeBBox(b)?.x || 0)));
+    const enriched = filtered.map(c => enrichSectionTree(c, rootBbox || abs, depth + 1, maxDepth)).filter(Boolean);
+    let prevBottom = null;
+    for (const kid of enriched) {
+      const kb = kid[3];
+      let gap = null;
+      if (kb && prevBottom !== null) gap = +(kb[1] - prevBottom).toFixed(1);
+      kid[6] = gap;
+      if (kb) prevBottom = kb[1] + kb[3];
+    }
+    if (enriched.length) kids = enriched;
+  }
+  return [node.id, node.type, name, bbox, tc, kids, null];
+};
+const GEMINI_URL = "https://rare-newt-287.convex.site/gemini";
+
+if (cmd === "tree") {
+  const cfg = authGuard(); if (!cfg) process.exit(0);
+  const outFile = process.argv[3] ? process.argv[3] : "sections.md";
+  const evalCode = `(()=>{const s=figma.currentPage.selection[0];if(!s)return null;return(function w(n){return{id:n.id,type:n.type,name:n.name,...(n.absoluteBoundingBox?{absoluteBoundingBox:{x:n.absoluteBoundingBox.x,y:n.absoluteBoundingBox.y,width:n.absoluteBoundingBox.width,height:n.absoluteBoundingBox.height}}:{}),...(n.type==='TEXT'?{characters:n.characters}:{}),children:Array.isArray(n.children)?n.children.map(w):[]}})(s)})()`;
+  try {
+    const { requestId } = await client.mutation("action:submit", { token: cfg.token, type: "eval", code: evalCode });
+    process.stdout.write("[CC] Fetching tree");
+    let rawTree;
+    try { rawTree = await fetchResultText(cfg.token, requestId); } catch (e) { console.error("\n[CC] Tree fetch failed:", e.message); throw e; }
+    console.log();
+    let tree;
+    try { tree = JSON.parse(rawTree); } catch (e) { console.error(`[CC] Invalid tree JSON (${rawTree.slice(0, 200)}):`, e.message); throw e; }
+    if (!tree) { console.error("[CC] No selection in Figma"); process.exitCode = 1; process.exit(0); }
+    const parentMap = new Map(); const containerSet = new Set(); const nodeYMap = new Map();
+    (function walk(n, p) {
+      if (n?.id) {
+        if (p) parentMap.set(n.id, p);
+        if (n?.children?.length) containerSet.add(n.id);
+        nodeYMap.set(n.id, (n.absoluteBoundingBox?.y ?? n.y ?? 0));
+        n.children?.forEach(c => walk(c, n.id));
+      }
+    })(tree, null);
+    const enriched = enrichSectionTree(tree);
+    process.stdout.write("[CC] Analyzing sections");
+    const geminiRes = await fetch(GEMINI_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ mode: "sections", tree: enriched }) });
+    if (!geminiRes.ok) { const txt = await geminiRes.text(); throw new Error(`Gemini proxy ${geminiRes.status}: ${txt.slice(0, 200)}`); }
+    const rawText = await geminiRes.text();
+    if (!rawText) throw new Error("Gemini returned empty response");
+    const body = JSON.parse(rawText);
+    const inner = body.text || rawText;
+    const json = inner.replace(/^```(?:json)?\s*/i, "").replace(/```\s*$/i, "").trim();
+    if (!json) throw new Error("Gemini returned empty response after unwrap");
+    const parsed = JSON.parse(json);
+    const claimed = new Set();
+    const clean = (parsed.sections || []).map(s => {
+      const ids = s.nodeIds || (s.nodeId ? [s.nodeId] : []);
+      for (const rawId of ids) {
+        let cur = rawId;
+        while (cur) {
+          if (cur === tree?.id || containerSet.has(cur)) {
+            if (!claimed.has(cur)) { claimed.add(cur); return { label: s.label, nodeIds: [cur] }; }
+            break;
+          }
+          cur = parentMap.get(cur);
+        }
+      }
+      return null;
+    }).filter(Boolean);
+    clean.sort((a, b) => (nodeYMap.get(a.nodeIds[0]) || 0) - (nodeYMap.get(b.nodeIds[0]) || 0));
+    const sections = clean.length ? clean : (tree?.id ? [{ label: tree?.name || "Selection", nodeIds: [tree.id] }] : []);
+    console.log(`\n[CC] ${sections.length} section(s)`);
+
+    let md = `# Sections Grid\n\nGenerated: ${new Date().toISOString().slice(0, 10)}\n\n`;
+    const w = 30;
+    md += `| ${"Section".padEnd(w)} | JSON | GEN | RESP |\n`;
+    md += `| ${"-".repeat(w)} | --- | --- | --- |\n`;
+    for (const s of sections) {
+      const lbl = s.label.replace(/\|/g, "&#124;").slice(0, w).padEnd(w);
+      md += `| ${lbl} | [ ] | [ ] | [ ] |\n`;
+    }
+
+    writeFileSync(outFile, md);
+    console.log(`[CC] Written to ${outFile} (${sections.length} sections)`);
+  } catch (e) { console.error("\n[CC] Sections failed:", e.message); process.exitCode = 1; }
   process.exit(0);
 }
 
