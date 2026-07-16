@@ -230,11 +230,12 @@ const runStage = async (cfg, sections, idx, stage) => {
     const inner = body.text || rawText;
     const fragment = inner.replace(/^```(?:html|jsx|tsx|javascript|js)?\s*/i, "").replace(/```\s*$/i, "").trim();
     const respPath = join(CC_CACHE, `${idx}-resp.html`);
-    const injected = html.replace(
+    const isFullDoc = /<\/html>/i.test(fragment);
+    const injected = isFullDoc ? fragment : html.replace(
       /(return\s*\()\s*(<>[\s\S]*?<\/>)\s*(\);)/,
       (_, pre, _mid, post) => `${pre}\n${fragment}\n${post}`
     );
-    writeFileSync(respPath, injected === html ? (fragment || inner) : injected);
+    writeFileSync(respPath, injected);
     console.log(`\n[CC] Written ${respPath}`);
     s.state.resp = true;
   }

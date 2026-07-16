@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style id="figma-hosted-fonts">
+      @font-face{font-family:"DM Sans";src:url("https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/fonts/dm-sans/600/normal.ttf") format("truetype");font-weight:600;font-style:normal;font-display:swap;}
       @font-face{font-family:"DM Sans";src:url("https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/fonts/dm-sans/700/normal.ttf") format("truetype");font-weight:700;font-style:normal;font-display:swap;}
       @font-face{font-family:"Inter";src:url("https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/fonts/inter/400/normal.ttf") format("truetype");font-weight:400;font-style:normal;font-display:swap;}
       @font-face{font-family:"Inter";src:url("https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/fonts/inter/500/normal.ttf") format("truetype");font-weight:500;font-style:normal;font-display:swap;}
+      @font-face{font-family:"Inter";src:url("https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/fonts/inter/600/normal.ttf") format("truetype");font-weight:600;font-style:normal;font-display:swap;}
     </style>
-    <title>Section</title>
+    <title>Main Container</title>
     <script>
         tailwind = { config: { corePlugins: { preflight: false } } };
     </script>
@@ -16,51 +18,57 @@
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    
 </head>
-<body class="m-0 overflow-auto bg-[#f5f5f5] relative">
+<body class="m-0 overflow-auto bg-[#f5f5f5]">
     <div id="root"></div>
     <script type="text/babel">
         function App() {
             return (
-<div className="w-full bg-[rgba(2,113,232,1)] py-12 px-4 md:px-8">
-  <div className="max-w-[1058px] mx-auto flex flex-col items-center text-center gap-8">
-    
-    <div className="bg-[rgba(228,241,255,1)] rounded-[32px] px-4 py-2">
-      <span className="text-[14px] font-[500] leading-[21px] text-[rgba(2,113,232,1)] font-['Inter',sans-serif]">
-        Our Tagline
-      </span>
-    </div>
-
-    <div className="flex flex-col gap-6">
-      <h1 className="text-[32px] md:text-[48px] font-[700] leading-[1.2] text-white font-['DM_Sans',sans-serif] tracking-[-0.04em]">
-        Rank on Google. Rank on AI. Grow your business.
-      </h1>
-      <p className="text-[16px] md:text-[18px] font-[400] leading-[27px] text-[rgba(219,234,254,1)] font-['Inter',sans-serif]">
-        Search is no longer just Google. People now find businesses through Al Overviews, ChatGPT, Perplexity, and Gemini. 
-        <br className="hidden xl:block" />
-        Khan IT helps you win on all of them.
-      </p>
-    </div>
-
-    <div className="flex flex-wrap justify-center gap-3">
-      {['Google', 'ChatGPT', 'Perplexity', 'Gemini', 'AI Overviews'].map((item) => (
-        <div 
-          key={item} 
-          className="px-4 py-2 rounded-[100px] bg-[rgba(255,255,255,0.25)] border border-[rgba(255,255,255,0.25)]"
-        >
-          <span className="text-[14px] font-[400] leading-[20px] text-white font-['Inter',sans-serif]">
-            {item}
-          </span>
-        </div>
-      ))}
-    </div>
-
-  </div>
-</div>
-);
+                <section className="w-full bg-white px-6 py-12 xl:px-[336.9px] xl:py-[120px]">
+                    <div className="flex flex-col xl:flex-row xl:gap-[32px]">
+                        <div className="w-full xl:flex-1 xl:max-w-[839px]">
+                            <div className="mb-[24px] flex h-[37px] items-center justify-center rounded-[32px] bg-[#f0f7ff] px-4 w-fit">
+                                <span className="text-[14px] font-[500] leading-[21px] text-[#0271e8] font-['Inter']">The Shift</span>
+                            </div>
+                            <h1 className="mb-[24px] text-[32px] font-[700] leading-[40px] text-[#060606] font-['DM_Sans'] xl:text-[48px] xl:leading-[54px]">
+                                Search Stopped Being Ten Blue Links. Your Visibility Strategy <br className="hidden xl:block" /> Has to Catch Up.
+                            </h1>
+                            <div className="flex flex-col gap-[16px] text-[16px] font-[400] leading-[24px] text-[#566476] font-['Inter'] xl:text-[18px] xl:leading-[27px]">
+                                <p>When someone asks ChatGPT "best SEO agency in Bangladesh" or Google shows an AI Overview for "how much does a website cost," a machine has already decided which brands to mention. No click, no second page, no chance to be found if you weren't chosen.</p>
+                                <p>Here's the uncomfortable research finding: fewer than 10% of sources cited by AI engines rank in the top 10 organic results for the same query. Traditional rankings and AI citations are overlapping but separate games, and winning one doesn't automatically win the other.</p>
+                                <p>The opportunity inside that problem: AI visibility is still wide open in most markets, including Bangladesh. The brands doing this work now are setting the answers AI engines will repeat for years. We'd rather your name be in those answers than your competitor's.</p>
+                            </div>
+                        </div>
+                        <div className="mt-12 w-full xl:mt-0 xl:flex-1 xl:max-w-[375.2px]">
+                            <div className="mb-[16px] rounded-[16px] border border-[#e2e8f0] bg-[linear-gradient(172.0deg,_rgba(255,_255,_255,_1)_0%,_rgba(238,_246,_254,_0.4)_100%)] p-[25px] shadow-[0px_1px_2px_rgba(15,23,42,0.04)]">
+                                <div className="flex gap-[12px]">
+                                    <div className="h-[40px] w-[40px] shrink-0 bg-[url('https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/actions/635818a1-1c78-423e-b5ca-1575a482a466')] bg-cover" />
+                                    <div>
+                                        <h3 className="mb-[2.75px] text-[14px] font-[600] leading-[20px] text-[#060606] font-['DM_Sans']">The new default answer</h3>
+                                        <p className="text-[14px] font-[400] leading-[22.75px] text-[#566476] font-['Inter']">Buyers ask AI engines directly — and accept the first named brand without clicking through to compare.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="mb-[16px] rounded-[16px] border border-[#e2e8f0] bg-white p-[25px] shadow-[0px_1px_2px_rgba(15,23,42,0.04)]">
+                                <div className="flex gap-[12px]">
+                                    <div className="h-[40px] w-[40px] shrink-0 bg-[url('https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/actions/1783e89c-cdcd-4ba1-8d2c-32e014b8cce1')] bg-cover" />
+                                    <div>
+                                        <h3 className="mb-[2.75px] text-[14px] font-[600] leading-[20px] text-[#060606] font-['DM_Sans']">The research gap</h3>
+                                        <p className="text-[14px] font-[400] leading-[22.75px] text-[#566476] font-['Inter']">AI-cited sources rarely match top-10 organic rank. One game doesn't win the other.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="relative overflow-hidden rounded-[16px] bg-[#0f172a] p-[24px] shadow-[0px_1px_0px_rgba(15,23,42,0.04)]">
+                                <h4 className="mb-[8px] text-[11px] font-[600] uppercase leading-[16.5px] tracking-[0.55px] text-[#84b9fb] font-['Inter']">Sources cited by AI engines</h4>
+                                <div className="mb-[8px] text-[48px] font-[700] leading-[48px] text-white font-['DM_Sans']">&lt;10%</div>
+                                <p className="text-[14px] font-[400] leading-[20px] text-[#d5dde7] font-['Inter']">Also rank in the top 10 organic results for the same query.</p>
+                                <div className="absolute -right-10 -top-10 h-[160px] w-[160px] rounded-full bg-[#0271e2]/30 blur-[56px]" />
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            );
         }
-
         ReactDOM.createRoot(document.getElementById('root')).render(<App />);
     </script>
 </body>

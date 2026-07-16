@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style id="figma-hosted-fonts">
+      @font-face{font-family:"DM Sans";src:url("https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/fonts/dm-sans/600/normal.ttf") format("truetype");font-weight:600;font-style:normal;font-display:swap;}
       @font-face{font-family:"DM Sans";src:url("https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/fonts/dm-sans/700/normal.ttf") format("truetype");font-weight:700;font-style:normal;font-display:swap;}
       @font-face{font-family:"Inter";src:url("https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/fonts/inter/400/normal.ttf") format("truetype");font-weight:400;font-style:normal;font-display:swap;}
       @font-face{font-family:"Inter";src:url("https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/fonts/inter/500/normal.ttf") format("truetype");font-weight:500;font-style:normal;font-display:swap;}
+      @font-face{font-family:"Inter";src:url("https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/fonts/inter/600/normal.ttf") format("truetype");font-weight:600;font-style:normal;font-display:swap;}
     </style>
-    <title>Section</title>
+    <title>Main Container</title>
     <script>
         tailwind = { config: { corePlugins: { preflight: false } } };
     </script>
@@ -24,57 +26,117 @@
         function App() {
             return (
                 <>
-                    <div className="relative origin-top-left" style={{ width: 1920, height: 379 }}>
-                        <div className="absolute left-[0px] top-[0px] w-[1920px] h-[379px] overflow-hidden" style={{"background":"rgba(2, 113, 232, 1)","clipPath":"path('M0 0L1920 0L1920 379L0 379L0 0Z')"}}>
-                          <div className="absolute left-[431px] top-[60px] w-[1058px] h-[259px]" style={{}}>
-                            <div className="absolute left-[0px] top-[0px] w-[1058px] h-[259px]" style={{}}>
-                              <div className="absolute left-[474.5px] top-[0px] w-[109px] h-[37px] rounded-[32px]" style={{"background":"rgba(228, 241, 255, 1)"}}>
-                                <div className="absolute left-[16px] top-[8px] w-[77px] h-[21px] text-[14px] font-[500] text-left leading-[21px] text-[rgba(2,_113,_232,_1)] [font-family:'Inter',_sans-serif]" style={{}}>
-                                  {"Our Tagline"}
+                    <div className="relative origin-top-left" style={{ width: 1920, height: 762 }}>
+                        <div className="absolute left-[0px] top-[0px] w-[1920px] h-[762px]" style={{"background":"rgba(255, 255, 255, 1)"}}>
+                          <div className="absolute left-[336.9px] top-[120px] w-[1246.2px] h-[522px]" style={{}}>
+                            <div className="absolute left-[0px] top-[0px] w-[839px] h-[522px]" style={{}}>
+                              <div className="absolute left-[0px] top-[0px] w-[839px] h-[522px]" style={{}}>
+                                <div className="absolute left-[0px] top-[0px] w-[93px] h-[37px] rounded-[32px]" style={{"background":"rgba(240, 247, 255, 1)"}}>
+                                  <div className="absolute left-[16px] top-[8px] w-[61px] h-[21px] text-[14px] font-[500] text-left leading-[21px] text-[rgba(2,_113,_232,_1)] [font-family:'Inter',_sans-serif]" style={{}}>
+                                    {"The Shift"}
+                                  </div>
+                                </div>
+                                <div className="absolute left-[0px] top-[61px] w-[839px] h-[461px] z-[1]" style={{}}>
+                                  <div className="absolute left-[0px] top-[0px] w-[839px] h-[162px] text-[48px] font-[700] text-left leading-[54px] text-[rgba(6,_6,_6,_1)] [font-family:'DM_Sans',_sans-serif]" style={{letterSpacing:'-4.2963e-07em'}}>
+                                    {"Search Stopped Being Ten Blue Links. Your Visibility Strategy "}
+                                    <br />
+                                    {"Has to Catch Up."}
+                                  </div>
+                                  <div className="absolute left-[0px] top-[186px] w-[839px] h-[275px] z-[1]" style={{}}>
+                                    <div className="absolute left-[0px] top-[0px] w-[839px] h-[81px] text-[18px] font-[400] text-left leading-[27px] text-[rgba(86,_100,_118,_1)] [font-family:'Inter',_sans-serif]" style={{}}>
+                                      {"When someone asks ChatGPT \"best SEO agency in Bangladesh\" or Google shows an AI Overview for \"how much does a website cost,\" a machine has already decided which brands to mention. No click, no second page, no chance to be found if you weren't chosen."}
+                                    </div>
+                                    <div className="absolute left-[0px] top-[97px] w-[839px] h-[81px] z-[1] text-[18px] font-[400] text-left leading-[27px] text-[rgba(86,_100,_118,_1)] [font-family:'Inter',_sans-serif]" style={{}}>
+                                      {"Here's the uncomfortable research finding: fewer than 10% of sources cited by AI engines rank in the top 10 organic results for the same query. Traditional rankings and AI citations are overlapping but separate games, and winning one doesn't automatically win the other."}
+                                    </div>
+                                    <div className="absolute left-[0px] top-[194px] w-[839px] h-[81px] z-[2] text-[18px] font-[400] text-left leading-[27px] text-[rgba(86,_100,_118,_1)] [font-family:'Inter',_sans-serif]" style={{}}>
+                                      {"The opportunity inside that problem: AI visibility is still wide open in most markets, including Bangladesh. The brands doing this work now are setting the answers AI engines will repeat for years. We'd rather your name be in those answers than your competitor's."}
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
-                              <div className="absolute left-[0px] top-[61px] w-[1058px] h-[198px] z-[1]" style={{}}>
-                                <div className="absolute left-[0px] top-[0px] w-[1058px] h-[128px]" style={{}}>
-                                  <div className="absolute left-[11.5px] top-[0px] w-[1035px] h-[54px] text-[48px] font-[700] text-left leading-[54px] text-[rgba(255,_255,_255,_1)] [font-family:'DM_Sans',_sans-serif]" style={{letterSpacing:'-0.0406959em'}}>
-                                    {"Rank on Google. Rank on AI. Grow your business."}
+                            </div>
+                            <div className="absolute left-[871px] top-[14.988px] w-[375.2px] h-[492.025px] z-[1]" style={{}}>
+                              <div className="absolute left-[0px] top-[0px] w-[375.2px] h-[141.75px] overflow-hidden rounded-[16px]" style={{"filter":"drop-shadow(0px 1px 2px rgba(15, 23, 42, 0.04))","clipPath":"path('M0 16C0 7.16345 7.16344 0 16 0L359.2 0C368.037 0 375.2 7.16344 375.2 16L375.2 125.75C375.2 134.587 368.037 141.75 359.2 141.75L16 141.75C7.16344 141.75 0 134.587 0 125.75L0 16Z')"}}>
+                                <div className="absolute inset-0 pointer-events-none rounded-[16px] bg-[linear-gradient(172.0deg,_rgba(255,_255,_255,_1)_0%,_rgba(238,_246,_254,_0.4)_100%)]" style={{}} />
+                                <div className="absolute left-[25px] top-[25px] w-[325.2px] h-[91.75px]" style={{}}>
+                                  <div className="absolute left-[0px] top-[0px] w-[40px] h-[40px]" style={{}}>
+                                    <div className="h-full w-full bg-no-repeat bg-[length:100%_100%]" style={{ backgroundImage: "url('https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/actions/635818a1-1c78-423e-b5ca-1575a482a466')" }} />
                                   </div>
-                                  <div className="absolute left-[0px] top-[74px] w-[1058px] h-[54px] z-[1] text-[18px] font-[400] text-center leading-[27px] text-[rgba(219,_234,_254,_1)] [font-family:'Inter',_sans-serif]" style={{}}>
-                                    {"Search is no longer just Google. People now find businesses through Al Overviews, ChatGPT, Perplexity, and Gemini. "}
-                                    <br />
-                                    {"Khan IT helps you win on all of them."}
+                                  <div className="absolute left-[52px] top-[0px] w-[273.19px] h-[91.75px] z-[1]" style={{}}>
+                                    <div className="absolute left-[0px] top-[0px] w-[273.19px] h-[20px]" style={{}}>
+                                      <div className="absolute left-[0px] top-[0px] w-[160px] h-[20px] text-[14px] font-[600] text-left leading-[20px] text-[rgba(6,_6,_6,_1)] [font-family:'DM_Sans',_sans-serif]" style={{}}>
+                                        {"The new default answer"}
+                                      </div>
+                                    </div>
+                                    <div className="absolute left-[0px] top-[22.75px] w-[273.19px] h-[69px] z-[1]" style={{}}>
+                                      <div className="absolute left-[0px] top-[0px] w-[247px] h-[69px] text-[14px] font-[400] text-left leading-[22.75px] text-[rgba(86,_100,_118,_1)] [font-family:'Inter',_sans-serif]" style={{}}>
+                                        <span style={{ whiteSpace: 'nowrap' }}>
+                                          {"Buyers ask AI engines directly — and"}
+                                        </span>
+                                        <br />
+                                        <span style={{ whiteSpace: 'nowrap' }}>
+                                          {"accept the first named brand without"}
+                                        </span>
+                                        <br />
+                                        <span style={{ whiteSpace: 'nowrap' }}>
+                                          {"clicking through to compare."}
+                                        </span>
+                                      </div>
+                                    </div>
                                   </div>
                                 </div>
-                                <div className="absolute left-[0px] top-[160px] w-[1058px] h-[38px] z-[1]" style={{}}>
-                                  <div className="absolute left-[258.5px] top-[0px] w-[82px] h-[38px] rounded-[100px]" style={{"background":"rgba(255, 255, 255, 0.25)"}}>
-                                    <div className="absolute left-[17px] top-[9px] w-[48px] h-[20px] text-[14px] font-[400] text-center leading-[20px] text-[rgba(255,_255,_255,_1)] [font-family:'Inter',_sans-serif]" style={{}}>
-                                      {"Google"}
-                                    </div>
-                                    <div className="absolute inset-0 pointer-events-none rounded-[100px] [border:1px_solid_rgba(255,_255,_255,_0.25)]" style={{}} />
+                                <div className="absolute inset-0 pointer-events-none rounded-[16px] [border:1px_solid_rgba(226,_232,_240,_1)]" style={{}} />
+                              </div>
+                              <div className="absolute left-[0px] top-[161.75px] w-[375.2px] h-[141.75px] z-[1] overflow-hidden rounded-[16px]" style={{"background":"rgba(255, 255, 255, 1)","filter":"drop-shadow(0px 1px 2px rgba(15, 23, 42, 0.04))","clipPath":"path('M0 16C0 7.16345 7.16344 0 16 0L359.2 0C368.037 0 375.2 7.16344 375.2 16L375.2 125.75C375.2 134.587 368.037 141.75 359.2 141.75L16 141.75C7.16344 141.75 0 134.587 0 125.75L0 16Z')"}}>
+                                <div className="absolute left-[25px] top-[25px] w-[325.2px] h-[91.75px]" style={{}}>
+                                  <div className="absolute left-[0px] top-[0px] w-[40px] h-[40px]" style={{}}>
+                                    <div className="h-full w-full bg-no-repeat bg-[length:100%_100%]" style={{ backgroundImage: "url('https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/actions/1783e89c-cdcd-4ba1-8d2c-32e014b8cce1')" }} />
                                   </div>
-                                  <div className="absolute left-[356.5px] top-[0px] w-[94px] h-[38px] z-[1] rounded-[100px]" style={{"background":"rgba(255, 255, 255, 0.25)"}}>
-                                    <div className="absolute left-[17px] top-[9px] w-[60px] h-[20px] text-[14px] font-[400] text-center leading-[20px] text-[rgba(255,_255,_255,_1)] [font-family:'Inter',_sans-serif]" style={{}}>
-                                      {"ChatGPT"}
+                                  <div className="absolute left-[52px] top-[0px] w-[273.19px] h-[91.75px] z-[1]" style={{}}>
+                                    <div className="absolute left-[0px] top-[0px] w-[273.19px] h-[20px]" style={{}}>
+                                      <div className="absolute left-[0px] top-[0px] w-[117px] h-[20px] text-[14px] font-[600] text-left leading-[20px] text-[rgba(6,_6,_6,_1)] [font-family:'DM_Sans',_sans-serif]" style={{}}>
+                                        {"The research gap"}
+                                      </div>
                                     </div>
-                                    <div className="absolute inset-0 pointer-events-none rounded-[100px] [border:1px_solid_rgba(255,_255,_255,_0.25)]" style={{}} />
-                                  </div>
-                                  <div className="absolute left-[466.5px] top-[0px] w-[100px] h-[38px] z-[2] rounded-[100px]" style={{"background":"rgba(255, 255, 255, 0.25)"}}>
-                                    <div className="absolute left-[17px] top-[9px] w-[66px] h-[20px] text-[14px] font-[400] text-center leading-[20px] text-[rgba(255,_255,_255,_1)] [font-family:'Inter',_sans-serif]" style={{}}>
-                                      {"Perplexity"}
+                                    <div className="absolute left-[0px] top-[22.75px] w-[273.19px] h-[69px] z-[1]" style={{}}>
+                                      <div className="absolute left-[0px] top-[0px] w-[263px] h-[69px] text-[14px] font-[400] text-left leading-[22.75px] text-[rgba(86,_100,_118,_1)] [font-family:'Inter',_sans-serif]" style={{}}>
+                                        <span style={{ whiteSpace: 'nowrap' }}>
+                                          {"AI-cited sources rarely match top-10"}
+                                        </span>
+                                        <br />
+                                        <span style={{ whiteSpace: 'nowrap' }}>
+                                          {"organic rank. One game doesn't win the"}
+                                        </span>
+                                        <br />
+                                        <span style={{ whiteSpace: 'nowrap' }}>
+                                          {"other."}
+                                        </span>
+                                      </div>
                                     </div>
-                                    <div className="absolute inset-0 pointer-events-none rounded-[100px] [border:1px_solid_rgba(255,_255,_255,_0.25)]" style={{}} />
                                   </div>
-                                  <div className="absolute left-[582.5px] top-[0px] w-[80px] h-[38px] z-[3] rounded-[100px]" style={{"background":"rgba(255, 255, 255, 0.25)"}}>
-                                    <div className="absolute left-[17px] top-[9px] w-[46px] h-[20px] text-[14px] font-[400] text-center leading-[20px] text-[rgba(255,_255,_255,_1)] [font-family:'Inter',_sans-serif]" style={{}}>
-                                      {"Gemini"}
-                                    </div>
-                                    <div className="absolute inset-0 pointer-events-none rounded-[100px] [border:1px_solid_rgba(255,_255,_255,_0.25)]" style={{}} />
+                                </div>
+                                <div className="absolute inset-0 pointer-events-none rounded-[16px] [border:1px_solid_rgba(226,_232,_240,_1)]" style={{}} />
+                              </div>
+                              <div className="absolute left-[0px] top-[323.5px] w-[375.2px] h-[168.525px] z-[2] overflow-hidden rounded-[16px]" style={{"background":"rgba(15, 23, 42, 1)","filter":"drop-shadow(0px 1px 0px rgba(15, 23, 42, 0.04))","clipPath":"path('M0 16C0 7.16345 7.16344 0 16 0L359.2 0C368.037 0 375.2 7.16344 375.2 16L375.2 152.525C375.2 161.362 368.037 168.525 359.2 168.525L16 168.525C7.16344 168.525 0 161.362 0 152.525L0 16Z')"}}>
+                                <div className="absolute left-[24px] top-[24px] w-[327.2px] h-[17px]" style={{}}>
+                                  <div className="absolute left-[0px] top-[0px] w-[327.2px] h-[17px] text-[11px] font-[600] text-left leading-[16.5px] tracking-[0.55px] text-[rgba(132,_185,_251,_1)] [font-family:'Inter',_sans-serif]" style={{"textTransform":"uppercase"}}>
+                                    {"Sources cited by AI engines"}
                                   </div>
-                                  <div className="absolute left-[678.5px] top-[0px] w-[121px] h-[38px] z-[4] rounded-[100px]" style={{"background":"rgba(255, 255, 255, 0.25)"}}>
-                                    <div className="absolute left-[17px] top-[9px] w-[87px] h-[20px] text-[14px] font-[400] text-center leading-[20px] text-[rgba(255,_255,_255,_1)] [font-family:'Inter',_sans-serif]" style={{letterSpacing:'-0.00283513em'}}>
-                                      {"AI Overviews"}
-                                    </div>
-                                    <div className="absolute inset-0 pointer-events-none rounded-[100px] [border:1px_solid_rgba(255,_255,_255,_0.25)]" style={{}} />
+                                </div>
+                                <div className="absolute left-[24px] top-[47.9px] w-[327.2px] h-[49.1px] z-[1]" style={{}}>
+                                  <div className="absolute left-[0px] top-[1.1px] w-[119px] h-[48px] text-[48px] font-[700] text-left leading-[48px] text-[rgba(255,_255,_255,_1)] [font-family:'DM_Sans',_sans-serif]" style={{letterSpacing:'-4.2963e-07em'}}>
+                                    {"<10%"}
                                   </div>
+                                </div>
+                                <div className="absolute left-[24px] top-[103.9px] w-[327.2px] h-[40.625px] z-[2]" style={{}}>
+                                  <div className="absolute left-[0px] top-[0px] w-[327.2px] h-[40px] text-[14px] font-[400] text-left leading-[20px] text-[rgba(213,_221,_231,_1)] [font-family:'Inter',_sans-serif]" style={{}}>
+                                    {"Also rank in the top 10 organic results for the"}
+                                    <br />
+                                    {"same query."}
+                                  </div>
+                                </div>
+                                <div className="absolute left-[239.1px] top-[-33.488px] w-[160px] h-[160px] z-[3] rounded-[9999px]" style={{"background":"rgba(2, 113, 232, 0.3)","filter":"blur(56px)"}}>
                                 </div>
                               </div>
                             </div>
