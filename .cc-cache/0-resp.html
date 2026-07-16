@@ -6,11 +6,12 @@
     <style id="figma-hosted-fonts">
       @font-face{font-family:"DM Sans";src:url("https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/fonts/dm-sans/600/normal.ttf") format("truetype");font-weight:600;font-style:normal;font-display:swap;}
       @font-face{font-family:"DM Sans";src:url("https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/fonts/dm-sans/700/normal.ttf") format("truetype");font-weight:700;font-style:normal;font-display:swap;}
+      @font-face{font-family:"DM Sans";src:url("https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/fonts/dm-sans/800/normal.ttf") format("truetype");font-weight:800;font-style:normal;font-display:swap;}
       @font-face{font-family:"Inter";src:url("https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/fonts/inter/400/normal.ttf") format("truetype");font-weight:400;font-style:normal;font-display:swap;}
       @font-face{font-family:"Inter";src:url("https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/fonts/inter/500/normal.ttf") format("truetype");font-weight:500;font-style:normal;font-display:swap;}
       @font-face{font-family:"Inter";src:url("https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/fonts/inter/600/normal.ttf") format("truetype");font-weight:600;font-style:normal;font-display:swap;}
     </style>
-    <title>Main Container</title>
+    <title>Group 21</title>
     <script>
         tailwind = { config: { corePlugins: { preflight: false } } };
     </script>
@@ -18,57 +19,94 @@
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
 </head>
-<body class="m-0 overflow-auto bg-[#f5f5f5]">
+<body class="m-0 overflow-auto bg-[#f5f5f5] relative">
     <div id="root"></div>
     <script type="text/babel">
         function App() {
             return (
-                <section className="w-full bg-white px-6 py-12 xl:px-[336.9px] xl:py-[120px]">
-                    <div className="flex flex-col xl:flex-row xl:gap-[32px]">
-                        <div className="w-full xl:flex-1 xl:max-w-[839px]">
-                            <div className="mb-[24px] flex h-[37px] items-center justify-center rounded-[32px] bg-[#f0f7ff] px-4 w-fit">
-                                <span className="text-[14px] font-[500] leading-[21px] text-[#0271e8] font-['Inter']">The Shift</span>
-                            </div>
-                            <h1 className="mb-[24px] text-[32px] font-[700] leading-[40px] text-[#060606] font-['DM_Sans'] xl:text-[48px] xl:leading-[54px]">
-                                Search Stopped Being Ten Blue Links. Your Visibility Strategy <br className="hidden xl:block" /> Has to Catch Up.
-                            </h1>
-                            <div className="flex flex-col gap-[16px] text-[16px] font-[400] leading-[24px] text-[#566476] font-['Inter'] xl:text-[18px] xl:leading-[27px]">
-                                <p>When someone asks ChatGPT "best SEO agency in Bangladesh" or Google shows an AI Overview for "how much does a website cost," a machine has already decided which brands to mention. No click, no second page, no chance to be found if you weren't chosen.</p>
-                                <p>Here's the uncomfortable research finding: fewer than 10% of sources cited by AI engines rank in the top 10 organic results for the same query. Traditional rankings and AI citations are overlapping but separate games, and winning one doesn't automatically win the other.</p>
-                                <p>The opportunity inside that problem: AI visibility is still wide open in most markets, including Bangladesh. The brands doing this work now are setting the answers AI engines will repeat for years. We'd rather your name be in those answers than your competitor's.</p>
-                            </div>
-                        </div>
-                        <div className="mt-12 w-full xl:mt-0 xl:flex-1 xl:max-w-[375.2px]">
-                            <div className="mb-[16px] rounded-[16px] border border-[#e2e8f0] bg-[linear-gradient(172.0deg,_rgba(255,_255,_255,_1)_0%,_rgba(238,_246,_254,_0.4)_100%)] p-[25px] shadow-[0px_1px_2px_rgba(15,23,42,0.04)]">
-                                <div className="flex gap-[12px]">
-                                    <div className="h-[40px] w-[40px] shrink-0 bg-[url('https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/actions/635818a1-1c78-423e-b5ca-1575a482a466')] bg-cover" />
-                                    <div>
-                                        <h3 className="mb-[2.75px] text-[14px] font-[600] leading-[20px] text-[#060606] font-['DM_Sans']">The new default answer</h3>
-                                        <p className="text-[14px] font-[400] leading-[22.75px] text-[#566476] font-['Inter']">Buyers ask AI engines directly — and accept the first named brand without clicking through to compare.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="mb-[16px] rounded-[16px] border border-[#e2e8f0] bg-white p-[25px] shadow-[0px_1px_2px_rgba(15,23,42,0.04)]">
-                                <div className="flex gap-[12px]">
-                                    <div className="h-[40px] w-[40px] shrink-0 bg-[url('https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/actions/1783e89c-cdcd-4ba1-8d2c-32e014b8cce1')] bg-cover" />
-                                    <div>
-                                        <h3 className="mb-[2.75px] text-[14px] font-[600] leading-[20px] text-[#060606] font-['DM_Sans']">The research gap</h3>
-                                        <p className="text-[14px] font-[400] leading-[22.75px] text-[#566476] font-['Inter']">AI-cited sources rarely match top-10 organic rank. One game doesn't win the other.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="relative overflow-hidden rounded-[16px] bg-[#0f172a] p-[24px] shadow-[0px_1px_0px_rgba(15,23,42,0.04)]">
-                                <h4 className="mb-[8px] text-[11px] font-[600] uppercase leading-[16.5px] tracking-[0.55px] text-[#84b9fb] font-['Inter']">Sources cited by AI engines</h4>
-                                <div className="mb-[8px] text-[48px] font-[700] leading-[48px] text-white font-['DM_Sans']">&lt;10%</div>
-                                <p className="text-[14px] font-[400] leading-[20px] text-[#d5dde7] font-['Inter']">Also rank in the top 10 organic results for the same query.</p>
-                                <div className="absolute -right-10 -top-10 h-[160px] w-[160px] rounded-full bg-[#0271e2]/30 blur-[56px]" />
-                            </div>
-                        </div>
-                    </div>
-                </section>
+                <>
+<>
+      <div className="relative w-full max-w-[1920px] mx-auto bg-[#f5f5f5] overflow-hidden">
+        <div className="relative w-full min-h-[1032px] bg-no-repeat bg-cover bg-center" style={{ backgroundImage: "url('https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/actions/e7dab53c-ed7b-4691-be0f-9e147cece092')" }}>
+          
+          <header className="w-full xl:h-[120px] flex items-center px-6 xl:px-[250px]">
+            <div className="flex-1 flex items-center justify-between py-6 xl:py-0">
+              <div className="w-[140px] xl:w-[196px] h-[30px] xl:h-[40px] bg-no-repeat bg-contain" style={{ backgroundImage: "url('https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/actions/50eacdee-bdca-4c0e-b385-f8bd94bc235e')" }} />
+              
+              <nav className="hidden xl:flex items-center gap-8 bg-white px-8 py-4 rounded-[100px] shadow-[0px_2px_20px_rgba(0,0,0,0.1)]">
+                {["Home", "About", "Services", "Case study", "Contact Us"].map((item) => (
+                  <a key={item} href="#" className="text-[18px] font-normal text-[#060606] font-['Inter']">{item}</a>
+                ))}
+              </nav>
+
+              <div className="hidden xl:flex items-center gap-2 bg-[#0271e8] px-6 py-3 rounded-[8px] text-white">
+                <div className="w-[20px] h-[20px] bg-no-repeat bg-contain" style={{ backgroundImage: "url('https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/actions/4aa714a5-d5b1-4b99-ae02-a6632b06a091')" }} />
+                <span className="text-[18px] font-medium font-['Inter']">+8801404282727</span>
+              </div>
+            </div>
+          </header>
+
+          <main className="px-6 xl:px-[250px] pt-10 xl:pt-[80px] flex flex-col xl:flex-row gap-12 xl:gap-0">
+            <div className="flex-1 xl:max-w-[764px]">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#dcedff] text-[#0271e8] text-[14px] font-medium font-['Inter'] mb-6">
+                GEO · AEO · AI Overviews · LLM Visibility
+              </div>
+              
+              <h1 className="text-[40px] xl:text-[80px] font-extrabold leading-[1.1] xl:leading-[96px] text-[#060606] font-['DM_Sans'] mb-6">
+                AI SEO Services: Get Your Brand Cited by <span className="text-[#0271e8]">ChatGPT, Gemini, and Google AI</span>
+              </h1>
+              
+              <p className="text-[16px] xl:text-[18px] leading-[27px] text-[#566476] font-['Inter'] mb-8">
+                AI SEO services optimise your business for visibility in AI-generated answers, covering generative engine optimization (GEO) for ChatGPT, Perplexity, and Gemini, answer engine optimization (AEO) for direct-answer queries, and Google AI Overview rankings. Khan IT builds the structured content, entity signals, and third-party citations AI engines check before recommending any brand, included in every SEO campaign we run.
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-4 mb-12">
+                <button className="bg-[#0271e8] text-white px-6 py-4 rounded-[8px] font-medium font-['Inter']">Check If AI Engines Mention Your Brand</button>
+                <button className="border border-[#0271e8] text-[#0271e8] px-6 py-4 rounded-[8px] font-medium font-['Inter']">See Our Pricing</button>
+              </div>
+
+              <div className="flex flex-wrap gap-3">
+                {["Practising GEO Since 2025", "Wikipedia Entity Work Verified on Clutch", "BASIS Registered"].map((tag) => (
+                  <div key={tag} className="px-4 py-2 rounded-full bg-[#f0f7ff] border border-[#cce5ff] text-[#0271e8] text-[12px] font-medium font-['Inter']">
+                    {tag}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="xl:flex-1 relative xl:ml-[56px] mt-10 xl:mt-0">
+              <div className="bg-white p-6 rounded-[24px] shadow-[0px_1px_0px_rgba(15,23,42,0.04)] border border-[#e2e8f0]">
+                <div className="flex justify-between items-center mb-6">
+                  <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-[#f0f7ff] text-[#0271e8] text-[11px] font-semibold uppercase tracking-wider">
+                    Verified Entity Work
+                  </div>
+                </div>
+                <div className="p-4 bg-[#f8fafc] rounded-[16px] border border-[#f1f5f9] mb-6">
+                  <p className="text-[11px] font-semibold text-[#94a3b8] uppercase mb-2">Client</p>
+                  <div className="h-[32px] bg-no-repeat bg-contain" style={{ backgroundImage: "url('https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/actions/64475b11-bdb7-45b3-8431-a330dbc7fe48')" }} />
+                </div>
+                <p className="text-[16px] text-[#566476] font-['Inter'] mb-6">
+                  We researched, drafted, and published IFAD Group's Wikipedia presence, the highest-authority entity source AI engines cite.
+                </p>
+                <div className="p-5 bg-[#f0f7ff] border border-[#0271e8]/20 rounded-[16px]">
+                  <p className="text-[11px] font-semibold text-[#353535] uppercase mb-2">Metric</p>
+                  <h3 className="text-[24px] font-semibold text-[#0271e8] font-['DM_Sans'] mb-2">Dual-language Wikipedia pages</h3>
+                  <div className="flex items-center gap-2 text-[14px] text-[#566476]">
+                    <div className="w-2 h-2 rounded-full bg-emerald-400" /> Live and maintained
+                  </div>
+                </div>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+    </>
+</>
             );
         }
+
         ReactDOM.createRoot(document.getElementById('root')).render(<App />);
     </script>
 </body>

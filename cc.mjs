@@ -56,8 +56,8 @@ const printHelp = () => {
   console.log("  auth <token>                              Authenticate with a session token");
   console.log("  generate <selection|url|node-id> [out]    Export design -> HTML/JSX (out .jsx/.tsx = component)");
   console.log("  pages                                     List all pages + top-level frames in the file");
-  console.log("  tree [out.md]                             Generate a markdown sections grid with checkboxes");
-  console.log("  run <file> <json|gen|resp|all> [idx]      Run a pipeline stage for a section");
+  console.log("  tree [out.md] [--single]                  Generate a markdown sections grid (--single = no AI splitting)");
+  console.log("  run <file> <json|gen|resp|all> [idx] [--single]  Run a pipeline stage for a section");
   console.log("  eval <code> [--out file]                  Run JS in the Figma sandbox, return JSON");
   console.log("  --help                                    Show this help");
   console.log("");
@@ -185,7 +185,7 @@ const writeSectionsMd = (file, sections) => {
   writeFileSync(file, md);
 };
 
-const runStage = async (cfg, sections, idx, stage) => {
+const runStage = async (cfg, sections, idx, stage, singleSectionFlag = false) => {
   const s = sections[idx];
   if (stage === "json") {
     for (const nodeId of s.nodeIds || []) {
@@ -203,7 +203,7 @@ const runStage = async (cfg, sections, idx, stage) => {
   if (stage === "gen") {
     const htmls = [];
     for (const nodeId of s.nodeIds || []) {
-      const { requestId } = await client.mutation("action:submit", { token: cfg.token, type: "generate", code: JSON.stringify({ nodeId, format: "react" }) });
+      const { requestId } = await client.mutation("action:submit", { token: cfg.token, type: "generate", code: JSON.stringify({ nodeId, format: "react", ...(singleSectionFlag ? { singleSection: true } : {}) }) });
       process.stdout.write(".");
       const html = await fetchResultText(cfg.token, requestId);
       htmls.push(html);
@@ -228,14 +228,18 @@ const runStage = async (cfg, sections, idx, stage) => {
     const rawText = await geminiRes.text();
     const body = JSON.parse(rawText);
     const inner = body.text || rawText;
-    const fragment = inner.replace(/^```(?:html|jsx|tsx|javascript|js)?\s*/i, "").replace(/```\s*$/i, "").trim();
+    const fenced = inner.replace(/^```(?:html|jsx|tsx|javascript|js)?\s*/i, "").replace(/```\s*$/i, "").trim();
     const respPath = join(CC_CACHE, `${idx}-resp.html`);
-    const isFullDoc = /<\/html>/i.test(fragment);
-    const injected = isFullDoc ? fragment : html.replace(
-      /(return\s*\()\s*(<>[\s\S]*?<\/>)\s*(\);)/,
-      (_, pre, _mid, post) => `${pre}\n${fragment}\n${post}`
-    );
-    writeFileSync(respPath, injected);
+    if (/<\/html>/i.test(fenced)) {
+      // Full HTML document from Gemini — use directly
+      writeFileSync(respPath, fenced);
+    } else {
+      // Gemini returned component source — extract the JSX fragment (<>...</>)
+      const jsxMatch = fenced.match(/(<>[\s\S]*?<\/>)/);
+      const jsx = jsxMatch ? jsxMatch[1] : fenced;
+      const injected = html.replace(/(<>)\s*([\s\S]*?)\s*(<\/>)/, (_, o, __, c) => `${o}\n${jsx}\n${c}`);
+      writeFileSync(respPath, injected);
+    }
     console.log(`\n[CC] Written ${respPath}`);
     s.state.resp = true;
   }
@@ -243,7 +247,9 @@ const runStage = async (cfg, sections, idx, stage) => {
 
 if (cmd === "tree") {
   const cfg = authGuard(); if (!cfg) process.exit(0);
-  const outFile = process.argv[3] ? process.argv[3] : "sections.md";
+  const treeArgs = process.argv.slice(3);
+  const singleTree = treeArgs.includes("--single");
+  const outFile = treeArgs.filter(a => a !== "--single")[0] || "sections.md";
   const evalCode = `(()=>{const s=figma.currentPage.selection[0];if(!s)return null;return(function w(n){return{id:n.id,type:n.type,name:n.name,...(n.absoluteBoundingBox?{absoluteBoundingBox:{x:n.absoluteBoundingBox.x,y:n.absoluteBoundingBox.y,width:n.absoluteBoundingBox.width,height:n.absoluteBoundingBox.height}}:{}),...(n.type==='TEXT'?{characters:n.characters}:{}),children:Array.isArray(n.children)?n.children.map(w):[]}})(s)})()`;
   try {
     const { requestId } = await client.mutation("action:submit", { token: cfg.token, type: "eval", code: evalCode });
@@ -254,45 +260,52 @@ if (cmd === "tree") {
     let tree;
     try { tree = JSON.parse(rawTree); } catch (e) { console.error(`[CC] Invalid tree JSON (${rawTree.slice(0, 200)}):`, e.message); throw e; }
     if (!tree) { console.error("[CC] No selection in Figma"); process.exitCode = 1; process.exit(0); }
-    const parentMap = new Map(); const containerSet = new Set(); const nodeYMap = new Map();
-    (function walk(n, p) {
-      if (n?.id) {
-        if (p) parentMap.set(n.id, p);
-        if (n?.children?.length && p === tree?.id) containerSet.add(n.id);
-        nodeYMap.set(n.id, (n.absoluteBoundingBox?.y ?? n.y ?? 0));
-        n.children?.forEach(c => walk(c, n.id));
-      }
-    })(tree, null);
-    const enriched = enrichSectionTree(tree);
-    process.stdout.write("[CC] Analyzing sections");
-    const geminiRes = await fetch(GEMINI_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ mode: "sections", tree: enriched }) });
-    if (!geminiRes.ok) { const txt = await geminiRes.text(); throw new Error(`Gemini proxy ${geminiRes.status}: ${txt.slice(0, 200)}`); }
-    const rawText = await geminiRes.text();
-    if (!rawText) throw new Error("Gemini returned empty response");
-    const body = JSON.parse(rawText);
-    const inner = body.text || rawText;
-    const json = inner.replace(/^```(?:json)?\s*/i, "").replace(/```\s*$/i, "").trim();
-    if (!json) throw new Error("Gemini returned empty response after unwrap");
-    const parsed = JSON.parse(json);
-    const claimed = new Set();
-    const clean = (parsed.sections || []).map(s => {
-      const ids = s.nodeIds || (s.nodeId ? [s.nodeId] : []);
-      for (const rawId of ids) {
-        let cur = rawId;
-        while (cur) {
-          if (cur === tree?.id) {
-            if (!claimed.has(cur)) { claimed.add(cur); return { label: s.label, nodeIds: [cur] }; }
-            break;
-          }
-          cur = parentMap.get(cur);
-        }
-      }
-      return null;
-    }).filter(Boolean);
-    clean.sort((a, b) => (nodeYMap.get(a.nodeIds[0]) || 0) - (nodeYMap.get(b.nodeIds[0]) || 0));
-    const sections = clean.length ? clean : (tree?.id ? [{ label: tree?.name || "Selection", nodeIds: [tree.id] }] : []);
-    console.log(`\n[CC] ${sections.length} section(s)`);
 
+    let sections;
+    if (singleTree) {
+      sections = tree?.id ? [{ label: tree?.name || "Selection", nodeIds: [tree.id] }] : [];
+      console.log(`\n[CC] Single section mode (no AI splitting)`);
+    } else {
+      const parentMap = new Map(); const containerSet = new Set(); const nodeYMap = new Map();
+      (function walk(n, p) {
+        if (n?.id) {
+          if (p) parentMap.set(n.id, p);
+          if (n?.children?.length && p === tree?.id) containerSet.add(n.id);
+          nodeYMap.set(n.id, (n.absoluteBoundingBox?.y ?? n.y ?? 0));
+          n.children?.forEach(c => walk(c, n.id));
+        }
+      })(tree, null);
+      const enriched = enrichSectionTree(tree);
+      process.stdout.write("[CC] Analyzing sections");
+      const geminiRes = await fetch(GEMINI_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ mode: "sections", tree: enriched }) });
+      if (!geminiRes.ok) { const txt = await geminiRes.text(); throw new Error(`Gemini proxy ${geminiRes.status}: ${txt.slice(0, 200)}`); }
+      const rawText = await geminiRes.text();
+      if (!rawText) throw new Error("Gemini returned empty response");
+      const body = JSON.parse(rawText);
+      const inner = body.text || rawText;
+      const json = inner.replace(/^```(?:json)?\s*/i, "").replace(/```\s*$/i, "").trim();
+      if (!json) throw new Error("Gemini returned empty response after unwrap");
+      const parsed = JSON.parse(json);
+      const claimed = new Set();
+      const clean = (parsed.sections || []).map(s => {
+        const ids = s.nodeIds || (s.nodeId ? [s.nodeId] : []);
+        for (const rawId of ids) {
+          let cur = rawId;
+          while (cur) {
+            if (cur === tree?.id) {
+              if (!claimed.has(cur)) { claimed.add(cur); return { label: s.label, nodeIds: [cur] }; }
+              break;
+            }
+            cur = parentMap.get(cur);
+          }
+        }
+        return null;
+      }).filter(Boolean);
+      clean.sort((a, b) => (nodeYMap.get(a.nodeIds[0]) || 0) - (nodeYMap.get(b.nodeIds[0]) || 0));
+      sections = clean.length ? clean : (tree?.id ? [{ label: tree?.name || "Selection", nodeIds: [tree.id] }] : []);
+    }
+
+    console.log(`[CC] ${sections.length} section(s)`);
     const data = sections.map(s => ({ label: s.label, nodeIds: s.nodeIds, state: { json: false, gen: false, resp: false } }));
     const w = 30;
     let md = `# Sections Grid\n\nGenerated: ${new Date().toISOString().slice(0, 10)}\n\n<!-- tree: ${JSON.stringify(data)} -->\n\n`;
@@ -311,20 +324,23 @@ if (cmd === "tree") {
 
 if (cmd === "run") {
   const cfg = authGuard(); if (!cfg) process.exit(0);
-  const sectionsFile = process.argv[3] ? process.argv[3] : "sections.md";
+  const runArgs = process.argv.slice(3);
+  const singleRun = runArgs.includes("--single");
+  const cleanRunArgs = runArgs.filter(a => a !== "--single");
+  const sectionsFile = cleanRunArgs[0] || "sections.md";
   const sections = (() => {
     const raw = readFileSync(sectionsFile, "utf-8");
     const m = raw.match(/<!-- tree:\s*(\[.*?\])\s*-->/);
     if (!m) throw new Error("No tree metadata in " + sectionsFile);
     return JSON.parse(m[1]);
   })();
-  const stage = process.argv[4];
-  const idx = parseInt(process.argv[5], 10);
+  const stage = cleanRunArgs[1];
+  const idx = parseInt(cleanRunArgs[2], 10);
   if (stage === "all") {
     for (let i = 0; i < sections.length; i++) {
       for (const s of ["json", "gen", "resp"]) {
         process.stdout.write(`\n[CC] Section ${i} ${s}`);
-        await runStage(cfg, sections, i, s);
+        await runStage(cfg, sections, i, s, singleRun);
         process.stdout.write(" done");
       }
     }
@@ -337,7 +353,7 @@ if (cmd === "run") {
     console.error(`[CC]        cc run <sections.md> all`);
     process.exitCode = 1; process.exit(0);
   }
-  await runStage(cfg, sections, idx, stage);
+  await runStage(cfg, sections, idx, stage, singleRun);
   writeSectionsMd(sectionsFile, sections);
   console.log(`[CC] Updated ${sectionsFile}`);
   process.exit(0);
