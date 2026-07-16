@@ -57,7 +57,7 @@ const printHelp = () => {
   console.log("  generate <selection|url|node-id> [out]    Export design -> HTML/JSX (out .jsx/.tsx = component)");
   console.log("  pages                                     List all pages + top-level frames in the file");
   console.log("  tree [out.md] [--single]                  Generate a markdown sections grid (--single = no AI splitting)");
-  console.log("  run <file> <json|gen|resp|all> [idx] [--single]  Run a pipeline stage for a section");
+  console.log("  run <file> <json|gen|resp|aggregate|all> [idx] [--single]  Run a pipeline stage for a section");
   console.log("  eval <code> [--out file]                  Run JS in the Figma sandbox, return JSON");
   console.log("  --help                                    Show this help");
   console.log("");
@@ -168,6 +168,59 @@ const enrichSectionTree = (node, rootBbox, depth = 0, maxDepth = 12) => {
 const GEMINI_URL = "https://rare-newt-287.convex.site/gemini";
 const CC_CACHE = join(process.cwd(), ".cc-cache");
 
+// ---- CLI aggregate (mirror of home.jsx aggregateReact) ----
+const sliceFns = src => {
+  const out = [], re = /function\s+(\w+)\s*\([^)]*\)\s*\{/g; let m;
+  while ((m = re.exec(src))) {
+    let d = 1, i = re.lastIndex; for (; i < src.length && d; i++) d += (src[i] === "{") - (src[i] === "}");
+    out.push({ name: m[1], body: src.slice(re.lastIndex, i - 1) }); re.lastIndex = i;
+  }
+  return out;
+};
+const stripReturn = b => {
+  const r = b.match(/return\s*\(?\s*<(\w+)\s*\/?>?\s*\)?\s*;?\s*$/);
+  return { decls: r ? b.slice(0, r.index).trim() : b.trim(), root: r?.[1] };
+};
+const unwrapReact = (decls, root) => {
+  const fns = sliceFns(decls), rf = fns.find(f => f.name === root);
+  const kids = rf ? [...rf.body.matchAll(/<(\w+)\s*\/>/g)].map(x => x[1]).filter(n => fns.some(f => f.name === n)) : [];
+  const pure = rf && kids.length && /^\s*return\s*\(?\s*<>[\s\S]*<\/>\s*\)?\s*;?\s*$/.test(rf.body.trim());
+  return pure ? kids.flatMap(n => { const s = stripReturn(fns.find(x => x.name === n).body); return unwrapReact(s.decls, s.root || root); })
+    : [{ body: decls, root }];
+};
+const reactSectionMods = doc => {
+  const babel = doc.match(/<script[^>]*type="text\/babel"[^>]*>([\s\S]*?)<\/script>/i)?.[1];
+  if (!babel) { console.error("[AGG] react section has no <script type=text/babel>"); return []; }
+  const root = babel.match(/render\s*\(\s*<(\w+)/)?.[1];
+  if (!root) { console.error("[AGG] react section has no render(<Root/>) call"); return []; }
+  const decls = babel.replace(/ReactDOM[\s\S]*?render\s*\([\s\S]*?\)\s*;?/, "").trim();
+  return unwrapReact(decls, root);
+};
+const aggregateReact = docs => {
+  const tagRe = /<title[\s\S]*?<\/title>|<style[\s\S]*?<\/style>|<script[\s\S]*?<\/script>|<(?:meta|link|base)\b[^>]*?\/?>/gi;
+  const seen = new Set();
+  const allTags = docs.flatMap(d => (d.match(/<head[^>]*>([\s\S]*?)<\/head>/i)?.[1] || "").match(tagRe) || []);
+  const fontFaceRe = /@font-face\{[^}]+\}/g;
+  const fontFaces = new Set();
+  allTags.forEach(t => { if (/id="figma-hosted-fonts"/.test(t)) { let m; while ((m = fontFaceRe.exec(t))) fontFaces.add(m[0]); } });
+  const fontStyle = fontFaces.size
+    ? `<style id="figma-hosted-fonts">\n      ${[...fontFaces].join("\n      ")}\n    </style>`
+    : "";
+  const head = [...allTags].filter(t => {
+    if (!t) return false;
+    if (/id="figma-hosted-fonts"/.test(t)) return false;
+    if (/<title[\s\S]*?<\/title>/i.test(t)) { if (seen.has("__title__")) return false; seen.add("__title__"); }
+    const k = t.replace(/\s+/g, " ").trim();
+    return seen.has(k) ? false : seen.add(k);
+  });
+  if (fontStyle) head.unshift(fontStyle);
+  const headStr = head.join("\n");
+  const mods = docs.flatMap(reactSectionMods);
+  const defs = mods.map((m, i) => `function Section${i}() {\n${m.body}\nreturn <${m.root} />;\n}`).join("\n\n");
+  const uses = mods.map((_, i) => `      <Section${i} />`).join("\n");
+  return `<!DOCTYPE html>\n<html lang="en">\n<head>\n${headStr}\n</head>\n<body class="m-0 overflow-auto bg-[#f5f5f5] relative">\n<div id="root"></div>\n<script type="text/babel">\n${defs}\n\nfunction App() {\n  return (\n    <>\n${uses}\n    </>\n  );\n}\nReactDOM.createRoot(document.getElementById('root')).render(<App />);\n</script>\n</body>\n</html>`;
+};
+
 const writeSectionsMd = (file, sections) => {
   const raw = readFileSync(file, "utf-8");
   const w = 30;
@@ -187,6 +240,21 @@ const writeSectionsMd = (file, sections) => {
 
 const runStage = async (cfg, sections, idx, stage, singleSectionFlag = false) => {
   const s = sections[idx];
+  if (stage === "aggregate") {
+    const ready = sections.filter(x => x.state.gen);
+    if (!ready.length) throw new Error("No sections have GEN output yet (run gen first)");
+    const docs = ready.map((_, i) => {
+      const p = join(CC_CACHE, `${i}.html`);
+      if (!existsSync(p)) throw new Error(`Missing GEN output for section ${i} (${p})`);
+      return readFileSync(p, "utf-8");
+    });
+    const out = aggregateReact(docs);
+    if (!existsSync(CC_CACHE)) mkdirSync(CC_CACHE, { recursive: true });
+    const aggPath = join(CC_CACHE, "sections.html");
+    writeFileSync(aggPath, out);
+    console.log(`\n[CC] Written aggregated ${aggPath} (${ready.length} sections)`);
+    return;
+  }
   if (stage === "json") {
     for (const nodeId of s.nodeIds || []) {
       const code = `(async()=>{const n=await figma.getNodeByIdAsync('${nodeId}');if(!n)return null;return{id:n.id,name:n.name,type:n.type}})()`;
@@ -278,11 +346,9 @@ if (cmd === "tree") {
       sections = tree?.id ? [{ label: tree?.name || "Selection", nodeIds: [tree.id] }] : [];
       console.log(`\n[CC] Single section mode (no AI splitting)`);
     } else {
-      const parentMap = new Map(); const containerSet = new Set(); const nodeYMap = new Map();
+      const nodeYMap = new Map();
       (function walk(n, p) {
         if (n?.id) {
-          if (p) parentMap.set(n.id, p);
-          if (n?.children?.length && p === tree?.id) containerSet.add(n.id);
           nodeYMap.set(n.id, (n.absoluteBoundingBox?.y ?? n.y ?? 0));
           n.children?.forEach(c => walk(c, n.id));
         }
@@ -298,21 +364,24 @@ if (cmd === "tree") {
       const json = inner.replace(/^```(?:json)?\s*/i, "").replace(/```\s*$/i, "").trim();
       if (!json) throw new Error("Gemini returned empty response after unwrap");
       const parsed = JSON.parse(json);
+      // descendant map: nodeId -> parent id (selection tree)
+      const descendantsOf = new Map();
+      (function index(n) {
+        if (!n?.id || !Array.isArray(n.children)) return;
+        for (const c of n.children) { descendantsOf.set(c.id, n.id); index(c); }
+      })(tree);
+      const isDescendantOf = (id, ancestor) => { let p = descendantsOf.get(id); while (p) { if (p === ancestor) return true; p = descendantsOf.get(p); } return false; };
+      // collect candidates, then drop any section that is a descendant (child/grandchild) of ANOTHER section (order-independent)
       const claimed = new Set();
-      const clean = (parsed.sections || []).map(s => {
+      const parsed2 = [];
+      for (const s of (parsed.sections || [])) {
         const ids = s.nodeIds || (s.nodeId ? [s.nodeId] : []);
-        for (const rawId of ids) {
-          let cur = rawId;
-          while (cur) {
-            if (cur === tree?.id) {
-              if (!claimed.has(cur)) { claimed.add(cur); return { label: s.label, nodeIds: [cur] }; }
-              break;
-            }
-            cur = parentMap.get(cur);
-          }
-        }
-        return null;
-      }).filter(Boolean);
+        const rawId = ids[0];
+        if (!rawId || claimed.has(rawId)) continue;                              // skip empties + exact dups
+        claimed.add(rawId);
+        parsed2.push({ label: s.label, nodeIds: [rawId] });
+      }
+      const clean = parsed2.filter(a => !parsed2.some(b => b !== a && isDescendantOf(a.nodeIds[0], b.nodeIds[0]))); // keep only top-level sections
       clean.sort((a, b) => (nodeYMap.get(a.nodeIds[0]) || 0) - (nodeYMap.get(b.nodeIds[0]) || 0));
       sections = clean.length ? clean : (tree?.id ? [{ label: tree?.name || "Selection", nodeIds: [tree.id] }] : []);
     }
@@ -356,12 +425,14 @@ if (cmd === "run") {
         process.stdout.write(" done");
       }
     }
+    process.stdout.write("\n[CC] Aggregating");
+    await runStage(cfg, sections, -1, "aggregate", singleRun);
     writeSectionsMd(sectionsFile, sections);
     console.log(`\n[CC] All sections complete`);
     process.exit(0);
   }
-  if (!["json", "gen", "resp"].includes(stage) || isNaN(idx) || idx < 0 || idx >= sections.length) {
-    console.error(`[CC] Usage: cc run <sections.md> <json|gen|resp|all> [index]`);
+  if (!["json", "gen", "resp", "aggregate"].includes(stage) || (!Number.isNaN(idx) && (stage !== "aggregate" && (idx < 0 || idx >= sections.length)))) {
+    console.error(`[CC] Usage: cc run <sections.md> <json|gen|resp|aggregate|all> [index]`);
     console.error(`[CC]        cc run <sections.md> all`);
     process.exitCode = 1; process.exit(0);
   }
