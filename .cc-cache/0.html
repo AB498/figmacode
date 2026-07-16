@@ -1,292 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style id="figma-hosted-fonts">
-      @font-face{font-family:"DM Sans";src:url("https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/fonts/dm-sans/600/normal.ttf") format("truetype");font-weight:600;font-style:normal;font-display:swap;}
-      @font-face{font-family:"DM Sans";src:url("https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/fonts/dm-sans/700/normal.ttf") format("truetype");font-weight:700;font-style:normal;font-display:swap;}
-      @font-face{font-family:"DM Sans";src:url("https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/fonts/dm-sans/800/normal.ttf") format("truetype");font-weight:800;font-style:normal;font-display:swap;}
-      @font-face{font-family:"Inter";src:url("https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/fonts/inter/400/normal.ttf") format("truetype");font-weight:400;font-style:normal;font-display:swap;}
-      @font-face{font-family:"Inter";src:url("https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/fonts/inter/500/normal.ttf") format("truetype");font-weight:500;font-style:normal;font-display:swap;}
-      @font-face{font-family:"Inter";src:url("https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/fonts/inter/600/normal.ttf") format("truetype");font-weight:600;font-style:normal;font-display:swap;}
-    </style>
-    <title>Group 21</title>
-    <script>
-        tailwind = { config: { corePlugins: { preflight: false } } };
-    </script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script>!function(){var S=[],f,c,a,mx=0,my=0;function toast(m){var t=document.getElementById('fdb-t');if(!t){t=document.createElement('div');t.id='fdb-t';t.style.cssText='position:fixed;background:#1a1a2e;color:white;padding:8px 16px;border-radius:6px;font-family:monospace;font-size:13px;z-index:100001;transition:opacity 0.3s;pointer-events:none';document.body.appendChild(t)}t.textContent=m;t.style.left=mx+'px';t.style.top=my+'px';t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(function(){t.style.opacity='0'},1500)};document.addEventListener('mousemove',function(e){mx=e.clientX+20;my=e.clientY+20});function g(){c||(c=function(){var d=document.createElement('div');d.id='fdb-s';d.style.cssText='position:absolute;pointer-events:none;z-index:99998;top:0;left:0;width:100%;min-height:100vh';document.body.appendChild(d);return d}());c.textContent='';if(!S.length){a&&(a.style.display='none');toast('Cleared all');return}var h='',sx=window.scrollX,sy=window.scrollY;S.forEach(function(e){var b=e.getBoundingClientRect();h+='<div style="position:absolute;left:'+(b.left+sx)+'px;top:'+(b.top+sy)+'px;width:'+b.width+'px;height:'+b.height+'px;border:2px solid #10b981;background:rgba(16,185,129,0.08);box-sizing:border-box"></div><div style="position:absolute;left:'+(b.left+sx+2)+'px;top:'+(b.top+sy+2)+'px;white-space:nowrap;background:#10b981;color:white;font-size:10px;font-family:monospace;font-weight:700;padding:1px 4px;border-radius:3px;line-height:14px">'+Math.round(b.width)+'×'+Math.round(b.height)+'</div>'});if(S.length==2){var b1=S[0].getBoundingClientRect(),b2=S[1].getBoundingClientRect(),c1=b1.left<=b2.left&&b1.top<=b2.top&&b1.right>=b2.right&&b1.bottom>=b2.bottom,c2=b2.left<=b1.left&&b2.top<=b1.top&&b2.right>=b1.right&&b2.bottom>=b1.bottom;if(c1||c2){var out=c1?b1:b2,inn=c1?b2:b1,ox=out.left+sx,oy=out.top+sy,ix=inn.left+sx,iy=inn.top+sy,icx=ix+inn.width/2,icy=iy+inn.height/2,td=Math.round(inn.top-out.top),bd=Math.round(out.bottom-inn.bottom),ld=Math.round(inn.left-out.left),rd=Math.round(out.right-inn.right);var ww=window.innerWidth,wh=window.innerHeight,cl=function(v,m,M){return v<m?m:v>M?M:v},clx=cl((ox+ix)/2,sx+24,sx+ww-24),cly=cl(icy,sy+14,sy+wh-14),crx=cl((ix+inn.width+ox+out.width)/2,sx+24,sx+ww-24),ctx=cl(icx,sx+24,sx+ww-24),cty=cl((oy+iy)/2,sy+14,sy+wh-14),cby=cl((iy+inn.height+oy+out.height)/2,sy+14,sy+wh-14);h+='<svg style="position:absolute;top:0;left:0;width:100%;height:100%;overflow:visible"><line x1="'+ox+'" y1="'+icy+'" x2="'+ix+'" y2="'+icy+'" stroke="#10b981" stroke-width="1" stroke-dasharray="4,3"/><rect x="'+(clx-16)+'" y="'+(cly-10)+'" width="32" height="20" rx="4" fill="#10b981"/><text x="'+clx+'" y="'+(cly+5)+'" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="monospace">'+ld+'</text><line x1="'+(ix+inn.width)+'" y1="'+icy+'" x2="'+(ox+out.width)+'" y2="'+icy+'" stroke="#10b981" stroke-width="1" stroke-dasharray="4,3"/><rect x="'+(crx-16)+'" y="'+(cly-10)+'" width="32" height="20" rx="4" fill="#10b981"/><text x="'+crx+'" y="'+(cly+5)+'" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="monospace">'+rd+'</text><line x1="'+icx+'" y1="'+oy+'" x2="'+icx+'" y2="'+iy+'" stroke="#10b981" stroke-width="1" stroke-dasharray="4,3"/><rect x="'+(ctx-16)+'" y="'+(cty-10)+'" width="32" height="20" rx="4" fill="#10b981"/><text x="'+ctx+'" y="'+(cty+5)+'" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="monospace">'+td+'</text><line x1="'+icx+'" y1="'+(iy+inn.height)+'" x2="'+icx+'" y2="'+(oy+out.height)+'" stroke="#10b981" stroke-width="1" stroke-dasharray="4,3"/><rect x="'+(ctx-16)+'" y="'+(cby-10)+'" width="32" height="20" rx="4" fill="#10b981"/><text x="'+ctx+'" y="'+(cby+5)+'" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="monospace">'+bd+'</text></svg>'}else{var l=b1.left<b2.left?b1:b2,R=b1.left<b2.left?b2:b1,t=b1.top<b2.top?b1:b2,B=b1.top<b2.top?b2:b1,hx=l.right+sx,hy=Math.max(l.bottom,R.bottom)+15+sy,hx2=R.left+sx,vx=Math.max(l.right,R.right)+15+sx,vy=t.bottom+sy,vy2=B.top+sy;var ww=window.innerWidth,wh=window.innerHeight,cl=function(v,m,M){return v<m?m:v>M?M:v},chx=cl((hx+hx2)/2,sx+24,sx+ww-24),chy=cl(hy,sy+14,sy+wh-14),cvx=cl(vx,sx+24,sx+ww-24),cvy=cl((vy+vy2)/2,sy+14,sy+wh-14);h+='<svg style="position:absolute;top:0;left:0;width:100%;height:100%;overflow:visible"><line x1="'+hx+'" y1="'+hy+'" x2="'+hx2+'" y2="'+hy+'" stroke="#10b981" stroke-width="1" stroke-dasharray="4,3"/><rect x="'+(chx-20)+'" y="'+(chy-10)+'" width="40" height="20" rx="4" fill="#10b981"/><text x="'+(hx+hx2)/2+'" y="'+(chy+5)+'" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="monospace">'+Math.round(R.left-l.right)+'</text><line x1="'+vx+'" y1="'+vy+'" x2="'+vx+'" y2="'+vy2+'" stroke="#10b981" stroke-width="1" stroke-dasharray="4,3"/><rect x="'+(cvx-20)+'" y="'+(cvy-10)+'" width="40" height="20" rx="4" fill="#10b981"/><text x="'+vx+'" y="'+(cvy+5)+'" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="monospace">'+Math.round(B.top-t.bottom)+'</text></svg>'}}c.innerHTML=h}document.addEventListener('mouseover',function(e){var t=e.target.closest('[data-figma-node-id]');f=f||function(){var d=document.createElement('div');d.id='fdb';d.style.cssText='position:absolute;pointer-events:none;z-index:99999;border:5px solid rgba(239,68,68,0.7);background:rgba(239,68,68,0.05)';document.body.appendChild(d);return d}();if(t===(f._el||null))return;f._el=t;if(!t){f.style.display='none';return}var r=t.getBoundingClientRect(),sx=window.scrollX,sy=window.scrollY;f.style.display='block';f.style.left=r.left+sx+'px';f.style.top=r.top+sy+'px';f.style.width=r.width+'px';f.style.height=r.height+'px'});document.addEventListener('mouseleave',function(e){f&&(f.style.display='none',f._el=null)});document.addEventListener('click',function(e){var t=e.target.closest('[data-figma-node-id]');if(!t)return;var i=S.indexOf(t);if(i>=0){S.splice(i,1);g();return}S.push(t);g()});document.addEventListener('keydown',function(e){if(e.key==='Escape'&&S.length){S.pop();g()}else if((e.ctrlKey||e.metaKey)&&e.key==='c'&&S.length){e.preventDefault();toast('Copied');navigator.clipboard.writeText(S.map(x=>x.outerHTML).join(''))}})}();</script>
-</head>
-<body class="m-0 overflow-auto bg-[#f5f5f5] relative">
-    <div id="root"></div>
-    <script type="text/babel">
-        function App() {
-            return (
-                <>
-                    <div className="relative origin-top-left" style={{ width: 1920, height: 1032 }}>
-                        <div className="absolute left-[0px] top-[0px] w-[1920px] h-[1032px]" style={{}} data-figma-node-id={"10072:1936"}>
-                          <div className="absolute left-[0px] top-[0px] w-[1920px] h-[1032px]" style={{}} data-figma-node-id={"10069:1936"}>
-                            <div className="absolute left-[0px] top-[0px] w-[1920px] h-[1032px]" style={{}} data-figma-node-id={"7885:1039"}>
-                              <div className="h-full w-full bg-no-repeat bg-[length:100%_100%]" style={{ backgroundImage: "url('https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/actions/ca95ab69-e322-492f-a727-570a8a420c58')" }} />
-                            </div>
-                            <div className="absolute left-[0px] top-[0px] w-[1920px] h-[120px] z-[1]" style={{}} data-figma-node-id={"7885:1047"}>
-                              <div className="absolute left-[250px] top-[24px] w-[1420px] h-[72px]" style={{}} data-figma-node-id={"7885:1048"}>
-                                <div className="absolute left-[0px] top-[16px] w-[196px] h-[40px] overflow-hidden" style={{}} data-figma-node-id={"7885:1049"}>
-                                  <div className="h-full w-full bg-no-repeat bg-[length:100%_100%]" style={{ backgroundImage: "url('https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/actions/dd3d0516-34fc-4d3b-935f-48e383768a9e')" }} />
-                                </div>
-                                <div className="absolute left-[359.5px] top-[0px] w-[669px] h-[72px] z-[1] rounded-[100px]" style={{"filter":"drop-shadow(0px 2px 20px rgba(0, 0, 0, 0.1))"}} data-figma-node-id={"7885:1067"}>
-                                  <div className="absolute left-[40px] top-[24px] w-[589px] h-[24px]" style={{}} data-figma-node-id={"7885:1068"}>
-                                    <div className="absolute left-[0px] top-[1px] h-[22px] text-[18px] font-[400] text-left leading-[22px] text-[rgba(6,_6,_6,_1)] [font-family:'Inter',_sans-serif]" style={{}} data-figma-node-id={"7885:1069"}>
-                                      {"Home"}
-                                    </div>
-                                    <div className="absolute left-[99px] top-[1px] h-[22px] z-[1] text-[18px] font-[400] text-left leading-[22px] text-[rgba(6,_6,_6,_1)] [font-family:'Inter',_sans-serif]" style={{}} data-figma-node-id={"7885:1070"}>
-                                      {"About"}
-                                    </div>
-                                    <div className="absolute left-[199px] top-[0px] w-[102px] h-[24px] z-[2]" style={{}} data-figma-node-id={"7885:1071"}>
-                                      <div className="absolute left-[0px] top-[1px] h-[22px] text-[18px] font-[400] text-left leading-[22px] text-[rgba(6,_6,_6,_1)] [font-family:'Inter',_sans-serif]" style={{}} data-figma-node-id={"7885:1072"}>
-                                        {"Services"}
-                                      </div>
-                                      <div className="absolute left-[78px] top-[0px] w-[24px] h-[24px] z-[1]" style={{}} data-figma-node-id={"7885:1073"}>
-                                        <div className="h-full w-full bg-no-repeat bg-[length:100%_100%]" style={{ backgroundImage: "url('https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/actions/56abeb6e-6df0-44b9-a3a6-d1194f08e49b')" }} />
-                                      </div>
-                                    </div>
-                                    <div className="absolute left-[349px] top-[1px] h-[22px] z-[3] text-[18px] font-[400] text-left leading-[22px] text-[rgba(6,_6,_6,_1)] [font-family:'Inter',_sans-serif]" style={{}} data-figma-node-id={"7885:1075"}>
-                                      {"Case study"}
-                                    </div>
-                                    <div className="absolute left-[493px] top-[1px] h-[22px] z-[4] text-[18px] font-[400] text-left leading-[22px] text-[rgba(6,_6,_6,_1)] [font-family:'Inter',_sans-serif]" style={{}} data-figma-node-id={"7885:1076"}>
-                                      {"Contact Us"}
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="absolute left-[1192px] top-[11px] w-[228px] h-[50px] z-[2] rounded-[8px]" style={{"background":"rgba(2, 113, 232, 1)"}} data-figma-node-id={"7885:1077"}>
-                                  <div className="absolute left-[24px] top-[13px] w-[180px] h-[24px]" style={{}} data-figma-node-id={"7885:1078"}>
-                                    <div className="absolute left-[0px] top-[2px] w-[20px] h-[20px]" style={{}} data-figma-node-id={"7885:1079"}>
-                                      <div className="h-full w-full bg-no-repeat bg-[length:100%_100%]" style={{ backgroundImage: "url('https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/actions/e5d399c7-fed5-493f-94c5-6116a72a0db5')" }} />
-                                    </div>
-                                    <div className="absolute left-[24px] top-[0px] h-[24px] z-[1] text-[18px] font-[500] text-left leading-[24px] text-[rgba(255,_255,_255,_1)] [font-family:'Inter',_sans-serif]" style={{}} data-figma-node-id={"7885:1080"}>
-                                      {"+8801404282727"}
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="absolute left-[250px] top-[200px] w-[1420px] h-[756px] z-[2]" style={{}} data-figma-node-id={"7885:1351"}>
-                              <div className="absolute left-[0px] top-[0px] w-[764px] h-[756px]" style={{}} data-figma-node-id={"7885:1352"}>
-                                <div className="absolute left-[0px] top-[0px] w-[329px] h-[37px] rounded-[9999px]" style={{"background":"rgba(220, 237, 255, 1)"}} data-figma-node-id={"7885:1353"}>
-                                  <div className="absolute left-[16px] top-[8px] w-[297px] h-[21px]" style={{}} data-figma-node-id={"7885:1354"}>
-                                    <div className="absolute left-[0px] top-[0px] h-[21px] text-[14px] font-[500] text-left leading-[21px] text-[rgba(2,_113,_232,_1)] [font-family:'Inter',_sans-serif]" style={{}} data-figma-node-id={"7885:1355"}>
-                                      {"GEO"}
-                                    </div>
-                                    <div className="absolute left-[38px] top-[2.5px] w-[4px] h-[16px] z-[1]" style={{}} data-figma-node-id={"7885:1356"}>
-                                      <div className="absolute left-[0px] top-[0px] h-[16px] text-[12px] font-[500] text-left leading-[16px] text-[rgba(2,_113,_232,_1)] [font-family:'Inter',_sans-serif]" style={{}} data-figma-node-id={"7885:1357"}>
-                                        {"·"}
-                                      </div>
-                                    </div>
-                                    <div className="absolute left-[50px] top-[0px] w-[29px] h-[21px] z-[2]" style={{}} data-figma-node-id={"7885:1358"}>
-                                      <div className="absolute left-[0px] top-[0px] h-[21px] text-[14px] font-[500] text-left leading-[21px] text-[rgba(2,_113,_232,_1)] [font-family:'Inter',_sans-serif]" style={{}} data-figma-node-id={"7885:1359"}>
-                                        {"AEO"}
-                                      </div>
-                                    </div>
-                                    <div className="absolute left-[87px] top-[2.5px] w-[4px] h-[16px] z-[3]" style={{}} data-figma-node-id={"7885:1360"}>
-                                      <div className="absolute left-[0px] top-[0px] h-[16px] text-[12px] font-[500] text-left leading-[16px] text-[rgba(2,_113,_232,_1)] [font-family:'Inter',_sans-serif]" style={{}} data-figma-node-id={"7885:1361"}>
-                                        {"·"}
-                                      </div>
-                                    </div>
-                                    <div className="absolute left-[99px] top-[0px] w-[89px] h-[21px] z-[4]" style={{}} data-figma-node-id={"7885:1362"}>
-                                      <div className="absolute left-[0px] top-[0px] h-[21px] text-[14px] font-[500] text-left leading-[21px] text-[rgba(2,_113,_232,_1)] [font-family:'Inter',_sans-serif]" style={{}} data-figma-node-id={"7885:1363"}>
-                                        {"AI Overviews"}
-                                      </div>
-                                    </div>
-                                    <div className="absolute left-[196px] top-[2.5px] w-[4px] h-[16px] z-[5]" style={{}} data-figma-node-id={"7886:1185"}>
-                                      <div className="absolute left-[0px] top-[0px] h-[16px] text-[12px] font-[500] text-left leading-[16px] text-[rgba(2,_113,_232,_1)] [font-family:'Inter',_sans-serif]" style={{}} data-figma-node-id={"7886:1186"}>
-                                        {"·"}
-                                      </div>
-                                    </div>
-                                    <div className="absolute left-[208px] top-[0px] w-[89px] h-[21px] z-[6]" style={{}} data-figma-node-id={"7886:1183"}>
-                                      <div className="absolute left-[0px] top-[0px] h-[21px] text-[14px] font-[500] text-left leading-[21px] text-[rgba(2,_113,_232,_1)] [font-family:'Inter',_sans-serif]" style={{letterSpacing:'-0.00197759em'}} data-figma-node-id={"7886:1184"}>
-                                        {"LLM Visibility"}
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="absolute left-[0px] top-[61px] w-[764px] h-[695px] z-[1]" style={{}} data-figma-node-id={"7885:1364"}>
-                                  <div className="absolute left-[0px] top-[0px] w-[764px] h-[695px]" style={{}} data-figma-node-id={"7885:1365"}>
-                                    <div className="absolute left-[0px] top-[0px] w-[764px] h-[637px]" style={{}} data-figma-node-id={"7885:1366"}>
-                                      <div className="absolute left-[0px] top-[0px] w-[764px] h-[539px]" style={{}} data-figma-node-id={"7885:1367"}>
-                                        <div className="absolute left-[0px] top-[0px] w-[764px] h-[384px] text-[80px] font-[800] text-left leading-[96px] text-[rgba(6,_6,_6,_1)] [font-family:'DM_Sans',_sans-serif]" style={{letterSpacing:'-0.0213436em'}} data-figma-node-id={"7885:1368"}>
-                                          {"AI SEO Services: Get Your Brand Cited by "}
-                                          <span style={{"fontFamily":"'DM Sans', sans-serif","fontSynthesis":"none","fontKerning":"normal","fontSize":"80px","fontWeight":800,"whiteSpace":"pre-wrap","color":"rgba(2, 113, 232, 1)"}}>{"ChatGPT, Gemini, and Google AI"}</span>
-                                        </div>
-                                        <div className="absolute left-[0px] top-[404px] w-[764px] h-[135px] z-[1] text-[18px] font-[400] text-left leading-[27px] text-[rgba(86,_100,_118,_1)] [font-family:'Inter',_sans-serif]" style={{}} data-figma-node-id={"7885:1369"}>
-                                          {"AI SEO services optimise your business for visibility in AI-generated answers, covering generative engine optimization (GEO) for ChatGPT, Perplexity, and Gemini, answer engine optimization (AEO) for direct-answer queries, and Google AI Overview rankings. Khan IT builds the structured content, entity signals, and third-party citations AI engines check before recommending any brand, included in every SEO campaign we run."}
-                                        </div>
-                                      </div>
-                                      <div className="absolute left-[0px] top-[587px] w-[591px] h-[50px] z-[1]" style={{}} data-figma-node-id={"7885:1370"}>
-                                        <div className="absolute left-[0px] top-[0px] w-[389px] h-[50px] rounded-[8px]" style={{"background":"rgba(2, 113, 232, 1)"}} data-figma-node-id={"7885:1371"}>
-                                          <div className="absolute left-[24px] top-[13px] w-[341px] h-[24px]" style={{}} data-figma-node-id={"7885:1372"}>
-                                            <div className="absolute left-[0px] top-[0px] h-[24px] text-[18px] font-[500] text-left leading-[24px] text-[rgba(255,_255,_255,_1)] [font-family:'Inter',_sans-serif]" style={{letterSpacing:'-0.00273374em'}} data-figma-node-id={"7885:1373"}>
-                                              {"Check If AI Engines Mention Your Brand"}
-                                            </div>
-                                          </div>
-                                        </div>
-                                        <div className="absolute left-[409px] top-[0px] w-[182px] h-[50px] z-[1] rounded-[8px]" style={{}} data-figma-node-id={"7885:1374"}>
-                                          <div className="absolute left-[24px] top-[13px] w-[134px] h-[24px]" style={{}} data-figma-node-id={"7885:1375"}>
-                                            <div className="absolute left-[0px] top-[0px] h-[24px] text-[18px] font-[500] text-left leading-[24px] text-[rgba(2,_113,_232,_1)] [font-family:'Inter',_sans-serif]" style={{}} data-figma-node-id={"7885:1376"}>
-                                              {"See Our Pricing"}
-                                            </div>
-                                          </div>
-                                          <div className="absolute inset-0 pointer-events-none rounded-[8px] [border:1px_solid_rgba(2,_113,_232,_1)]" style={{}} />
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div className="absolute left-[0px] top-[669px] w-[627px] h-[26px] z-[1]" style={{}} data-figma-node-id={"7908:1318"}>
-                                      <div className="absolute left-[0px] top-[0px] w-[188px] h-[26px] rounded-[100px]" style={{"background":"rgba(240, 247, 255, 1)"}} data-figma-node-id={"7908:1319"}>
-                                        <div className="absolute left-[17px] top-[5px] h-[16px] text-[12px] font-[500] text-left leading-[16px] text-[rgba(2,_113,_232,_1)] [font-family:'Inter',_sans-serif]" style={{}} data-figma-node-id={"7908:1320"}>
-                                          {"Practising GEO Since 2025"}
-                                        </div>
-                                        <div className="absolute inset-0 pointer-events-none rounded-[100px] [border:1px_solid_rgba(204,_229,_255,_1)]" style={{}} />
-                                      </div>
-                                      <div className="absolute left-[208px] top-[0px] w-[265px] h-[26px] z-[1] rounded-[100px]" style={{"background":"rgba(240, 247, 255, 1)"}} data-figma-node-id={"7908:1321"}>
-                                        <div className="absolute left-[17px] top-[5px] h-[16px] text-[12px] font-[500] text-left leading-[16px] text-[rgba(2,_113,_232,_1)] [font-family:'Inter',_sans-serif]" style={{}} data-figma-node-id={"7908:1322"}>
-                                          {"Wikipedia Entity Work Verified on Clutch"}
-                                        </div>
-                                        <div className="absolute inset-0 pointer-events-none rounded-[100px] [border:1px_solid_rgba(204,_229,_255,_1)]" style={{}} />
-                                      </div>
-                                      <div className="absolute left-[493px] top-[0px] w-[134px] h-[26px] z-[2] rounded-[100px]" style={{"background":"rgba(240, 247, 255, 1)"}} data-figma-node-id={"7908:1323"}>
-                                        <div className="absolute left-[17px] top-[5px] h-[16px] text-[12px] font-[500] text-left leading-[16px] text-[rgba(2,_113,_232,_1)] [font-family:'Inter',_sans-serif]" style={{}} data-figma-node-id={"7908:1324"}>
-                                          {"BASIS Registered"}
-                                        </div>
-                                        <div className="absolute inset-0 pointer-events-none rounded-[100px] [border:1px_solid_rgba(204,_229,_255,_1)]" style={{}} />
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="absolute left-[820px] top-[123.755px] w-[509.2px] h-[508.49px] z-[1]" style={{}} data-figma-node-id={"7886:1274"}>
-                                <div className="absolute left-[0px] top-[0px] w-[509.2px] h-[508.49px] overflow-hidden rounded-[24px]" style={{"background":"rgba(255, 255, 255, 1)","filter":"drop-shadow(0px 1px 0px rgba(15, 23, 42, 0.04))","clipPath":"path('M0 24C0 10.7451 10.7452 0 24 0L485.2 0C498.455 0 509.2 10.7452 509.2 24L509.2 484.49C509.2 497.745 498.455 508.49 485.2 508.49L24 508.49C10.7452 508.49 0 497.745 0 484.49L0 24Z')"}} data-figma-node-id={"7886:1275"}>
-                                  <div className="absolute left-[33px] top-[33px] w-[443.2px] h-[37.9px]" style={{}} data-figma-node-id={"7886:1276"}>
-                                    <div className="absolute left-[0px] top-[0px] w-[183px] h-[25px] rounded-[9999px]" style={{"background":"rgba(240, 247, 255, 1)"}} data-figma-node-id={"7886:1277"}>
-                                      <div className="absolute left-[12px] top-[5.5px] w-[14px] h-[14px] overflow-hidden" style={{}} data-figma-node-id={"7886:1278"}>
-                                        <div className="h-full w-full bg-no-repeat bg-[length:100%_100%]" style={{ backgroundImage: "url('https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/actions/3918ed55-f8b2-4712-8ae5-80a79b1de477')" }} />
-                                      </div>
-                                      <div className="absolute left-[32px] top-[4px] h-[17px] z-[1] text-[11px] font-[600] text-left leading-[16.5px] tracking-[0.55px] text-[rgba(2,_113,_232,_1)] [font-family:'Inter',_sans-serif]" style={{"textTransform":"uppercase"}} data-figma-node-id={"7886:1281"}>
-                                        {"Verified Entity Work"}
-                                      </div>
-                                    </div>
-                                    <div className="absolute left-[365.19px] top-[5.5px] w-[78px] h-[14px] z-[1]" style={{}} data-figma-node-id={"7886:1282"}>
-                                      <div className="h-full w-full bg-no-repeat bg-[length:100%_100%]" style={{ backgroundImage: "url('https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/actions/7ea80600-6f8e-4015-aee3-8669e1f6dde2')" }} />
-                                    </div>
-                                  </div>
-                                  <div className="absolute left-[33px] top-[86.9px] w-[443.2px] h-[75.19px] z-[1] rounded-[16px]" style={{"background":"rgba(248, 250, 252, 0.6)"}} data-figma-node-id={"7886:1293"}>
-                                    <div className="absolute left-[17px] top-[13px] w-[82.297px] h-[49.19px]" style={{}} data-figma-node-id={"7886:1294"}>
-                                      <div className="absolute left-[0px] top-[0px] w-[82.297px] h-[17px]" style={{}} data-figma-node-id={"7886:1295"}>
-                                        <div className="absolute left-[0px] top-[0px] h-[17px] text-[11px] font-[600] text-left leading-[16.5px] tracking-[0.55px] text-[rgba(148,_163,_184,_1)] [font-family:'Inter',_sans-serif]" style={{"textTransform":"uppercase"}} data-figma-node-id={"7886:1296"}>
-                                          {"Client"}
-                                        </div>
-                                      </div>
-                                      <div className="absolute left-[0px] top-[17px] w-[82.297px] h-[32.19px] z-[1]" style={{}} data-figma-node-id={"7886:1297"}>
-                                        <div className="h-full w-full bg-no-repeat bg-[length:100%_100%]" style={{ backgroundImage: "url('https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/actions/0ffdf071-ca20-468d-8164-d67dd4c1e10b')" }} />
-                                      </div>
-                                    </div>
-                                    <div className="absolute left-[233.2px] top-[24.095px] w-[193px] h-[27px] z-[1] rounded-[9999px]" style={{"background":"rgba(255, 255, 255, 1)"}} data-figma-node-id={"7886:1299"}>
-                                      <div className="absolute left-[11px] top-[5px] h-[17px] text-[11px] font-[600] text-left leading-[16.5px] text-[rgba(2,_113,_232,_1)] [font-family:'Inter',_sans-serif]" style={{}} data-figma-node-id={"7886:1300"}>
-                                        {"Group Vice Chairman confirmed"}
-                                      </div>
-                                      <div className="absolute inset-0 pointer-events-none rounded-[9999px] [border:1px_solid_rgba(167,_205,_251,_1)]" style={{}} />
-                                    </div>
-                                    <div className="absolute inset-0 pointer-events-none rounded-[16px] [border:1px_solid_rgba(241,_245,_249,_1)]" style={{}} />
-                                  </div>
-                                  <div className="absolute left-[33px] top-[178.09px] w-[28px] h-[28px] z-[2] overflow-hidden" style={{}} data-figma-node-id={"7886:1301"}>
-                                    <div className="h-full w-full bg-no-repeat bg-[length:100%_100%]" style={{ backgroundImage: "url('https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/actions/0b4d6d13-bff2-459c-b6ac-d4872cb727e2')" }} />
-                                  </div>
-                                  <div className="absolute left-[33px] top-[222.09px] w-[443.2px] h-[112.9px] z-[3]" style={{}} data-figma-node-id={"7886:1304"}>
-                                    <div className="absolute left-[0px] top-[0px] w-[443.2px] h-[96px] text-[16px] font-[400] text-left leading-[24px] text-[rgba(86,_100,_118,_1)] [font-family:'Inter',_sans-serif]" style={{letterSpacing:'-0.00339881em'}} data-figma-node-id={"7886:1305"}>
-                                      {"We researched, drafted, and published IFAD Group's"}
-                                      <br />
-                                      {"Wikipedia presence, the highest-authority entity source AI"}
-                                      <br />
-                                      {"engines cite. Work confirmed in a verified Clutch review by"}
-                                      <br />
-                                      {"the Group Vice Chairman."}
-                                    </div>
-                                  </div>
-                                  <div className="absolute left-[380.18px] top-[-63px] w-[192px] h-[192px] z-[4] rounded-[9999px]" style={{"filter":"blur(20px)"}} data-figma-node-id={"7886:1306"}>
-                                  </div>
-                                  <div className="absolute left-[33px] top-[350.99px] w-[443.2px] h-[124.5px] z-[5] rounded-[16px]" style={{"background":"rgba(240, 247, 255, 1)"}} data-figma-node-id={"7886:1307"}>
-                                    <div className="absolute left-[0px] top-[0px] w-[443.19px] h-[124.5px] border-[1px_solid_rgba(2,_113,_232,_0.2)] rounded-[16px]" style={{"background":"rgba(255, 255, 255, 0.002)","filter":"drop-shadow(0px 4px 50px rgba(2, 113, 232, 0.1))"}} data-figma-node-id={"7886:1308"}>
-                                    </div>
-                                    <div className="absolute left-[20px] top-[20px] w-[403.2px] h-[17px] z-[1]" style={{}} data-figma-node-id={"7886:1309"}>
-                                      <div className="absolute left-[0px] top-[0px] w-[403.2px] h-[17px] text-[11px] font-[600] text-left leading-[16.5px] tracking-[0.55px] text-[rgba(53,_53,_53,_1)] [font-family:'Inter',_sans-serif]" style={{"textTransform":"uppercase"}} data-figma-node-id={"7886:1310"}>
-                                        {"Metric"}
-                                      </div>
-                                    </div>
-                                    <div className="absolute left-[20px] top-[43px] w-[403.2px] h-[30px] z-[2]" style={{}} data-figma-node-id={"7886:1311"}>
-                                      <div className="absolute left-[0px] top-[0px] w-[403.2px] h-[30px] text-[24px] font-[600] text-left leading-[30px] text-[rgba(2,_113,_232,_1)] [font-family:'DM_Sans',_sans-serif]" style={{}} data-figma-node-id={"7886:1312"}>
-                                        {"Dual-language Wikipedia pages"}
-                                      </div>
-                                    </div>
-                                    <div className="absolute left-[20px] top-[79px] w-[403.2px] h-[25.5px] z-[3]" style={{}} data-figma-node-id={"7886:1313"}>
-                                      <div className="absolute left-[0px] top-[11.5px] w-[8px] h-[8px]" style={{}} data-figma-node-id={"7886:1314"}>
-                                        <div className="absolute left-[0px] top-[0px] w-[8px] h-[8px] rounded-[9999px]" style={{"background":"rgba(110, 231, 183, 1)"}} data-figma-node-id={"7886:1315"}>
-                                        </div>
-                                        <div className="absolute left-[0px] top-[0px] w-[8px] h-[8px] z-[1] rounded-[9999px]" style={{"background":"rgba(52, 211, 153, 1)"}} data-figma-node-id={"7886:1316"}>
-                                        </div>
-                                      </div>
-                                      <div className="absolute left-[16px] top-[5.5px] h-[20px] z-[1] text-[14px] font-[500] text-left leading-[20px] text-[rgba(86,_100,_118,_1)] [font-family:'Inter',_sans-serif]" style={{}} data-figma-node-id={"7886:1317"}>
-                                        {"Live and maintained"}
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div className="absolute inset-0 pointer-events-none rounded-[24px] [border:1px_solid_rgba(226,_232,_240,_0.8)]" style={{}} />
-                                </div>
-                              </div>
-                              <div className="absolute left-[793px] top-[94px] w-[183.995px] h-[50px] z-[2] rounded-[8px]" style={{"background":"rgba(255, 255, 255, 1)"}} data-figma-node-id={"7886:1318"}>
-                                <div className="absolute left-[15px] top-[9px] w-[153.995px] h-[32px]" style={{}} data-figma-node-id={"7886:1320"}>
-                                  <div className="absolute left-[0px] top-[2.001px] w-[27.998px] h-[27.998px]" style={{}} data-figma-node-id={"7886:1321"}>
-                                    <div className="h-full w-full bg-no-repeat bg-[length:100%_100%]" style={{ backgroundImage: "url('https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/actions/7e3f7e7c-4085-4725-ac92-408fa5ffa761')" }} />
-                                  </div>
-                                  <div className="absolute left-[35.995px] top-[0px] w-[118px] h-[32px] z-[1]" style={{}} data-figma-node-id={"7886:1325"}>
-                                    <div className="absolute left-[0px] top-[0px] h-[12px] text-[10px] font-[500] text-left leading-[12px] tracking-[0.5px] text-[rgba(148,_163,_184,_1)] [font-family:'Inter',_sans-serif]" style={{"textTransform":"uppercase"}} data-figma-node-id={"7886:1326"}>
-                                      {"Live"}
-                                    </div>
-                                    <div className="absolute left-[0px] top-[16px] h-[16px] z-[1] text-[12px] font-[600] text-left leading-[16px] text-[rgba(6,_6,_6,_1)] [font-family:'Inter',_sans-serif]" style={{}} data-figma-node-id={"7886:1327"}>
-                                      {"Wikipedia Published"}
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="absolute inset-0 pointer-events-none rounded-[8px] [border:1px_solid_rgba(226,_232,_240,_1)]" style={{}} />
-                              </div>
-                              <div className="absolute left-[1130px] top-[583px] w-[278.984px] h-[78px] z-[3] rounded-[10px]" style={{"background":"rgba(255, 255, 255, 1)","boxShadow":"0px 4px 50px -3px rgba(0, 0, 0, 0.1)"}} data-figma-node-id={"7886:1342"}>
-                                <div className="absolute left-[17px] top-[19px] w-[40px] h-[40px]" style={{}} data-figma-node-id={"7886:1343"}>
-                                  <div className="h-full w-full bg-no-repeat bg-[length:100%_100%]" style={{ backgroundImage: "url('https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/actions/7add31d1-ed8f-4e2a-9349-998a20485222')" }} />
-                                </div>
-                                <div className="absolute left-[69px] top-[17px] w-[192.984px] h-[44px] z-[1]" style={{}} data-figma-node-id={"7886:1347"}>
-                                  <div className="absolute left-[0px] top-[0px] w-[192.984px] h-[28px]" style={{}} data-figma-node-id={"7886:1348"}>
-                                    <div className="absolute left-[0px] top-[0px] h-[28px] text-[18px] font-[700] text-left leading-[28px] text-[rgba(10,_15,_30,_1)] [font-family:'DM_Sans',_sans-serif]" style={{}} data-figma-node-id={"7886:1349"}>
-                                      {"+40%"}
-                                    </div>
-                                  </div>
-                                  <div className="absolute left-[0px] top-[28px] w-[192.984px] h-[16px] z-[1]" style={{}} data-figma-node-id={"7886:1350"}>
-                                    <div className="absolute left-[0px] top-[0px] h-[16px] text-[12px] font-[400] text-left leading-[16px] text-[rgba(106,_114,_130,_1)] [font-family:'Inter',_sans-serif]" style={{}} data-figma-node-id={"7886:1351"}>
-                                      {"GEO visibility lift (Princeton study)"}
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="absolute inset-0 pointer-events-none rounded-[10px] [border:1px_solid_rgba(243,_244,_246,_1)]" style={{}} />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                    </div>
-                </>
-            );
-        }
 
-        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
-    </script>
+<head>
+
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style id="figma-hosted-fonts">
+    @font-face {
+      font-family: "Inter";
+      src: url("https://pub-e9f6f8fe38ed4236ada6962783ff638d.r2.dev/fonts/inter/500/normal.ttf") format("truetype");
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+  </style>
+  <title>Start Free Button Container</title>
+  <script>
+    tailwind = { config: { corePlugins: { preflight: false } } };
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script>!function () { var S = [], f, c, a, mx = 0, my = 0; function toast(m) { var t = document.getElementById('fdb-t'); if (!t) { t = document.createElement('div'); t.id = 'fdb-t'; t.style.cssText = 'position:fixed;background:#1a1a2e;color:white;padding:8px 16px;border-radius:6px;font-family:monospace;font-size:13px;z-index:100001;transition:opacity 0.3s;pointer-events:none'; document.body.appendChild(t) } t.textContent = m; t.style.left = mx + 'px'; t.style.top = my + 'px'; t.style.opacity = '1'; clearTimeout(t._t); t._t = setTimeout(function () { t.style.opacity = '0' }, 1500) }; document.addEventListener('mousemove', function (e) { mx = e.clientX + 20; my = e.clientY + 20 }); function g() { c || (c = function () { var d = document.createElement('div'); d.id = 'fdb-s'; d.style.cssText = 'position:absolute;pointer-events:none;z-index:99998;top:0;left:0;width:100%;min-height:100vh'; document.body.appendChild(d); return d }()); c.textContent = ''; if (!S.length) { a && (a.style.display = 'none'); toast('Cleared all'); return } var h = '', sx = window.scrollX, sy = window.scrollY; S.forEach(function (e) { var b = e.getBoundingClientRect(); h += '<div style="position:absolute;left:' + (b.left + sx) + 'px;top:' + (b.top + sy) + 'px;width:' + b.width + 'px;height:' + b.height + 'px;border:2px solid #10b981;background:rgba(16,185,129,0.08);box-sizing:border-box"></div><div style="position:absolute;left:' + (b.left + sx + 2) + 'px;top:' + (b.top + sy + 2) + 'px;white-space:nowrap;background:#10b981;color:white;font-size:10px;font-family:monospace;font-weight:700;padding:1px 4px;border-radius:3px;line-height:14px">' + Math.round(b.width) + '×' + Math.round(b.height) + '</div>' }); if (S.length == 2) { var b1 = S[0].getBoundingClientRect(), b2 = S[1].getBoundingClientRect(), c1 = b1.left <= b2.left && b1.top <= b2.top && b1.right >= b2.right && b1.bottom >= b2.bottom, c2 = b2.left <= b1.left && b2.top <= b1.top && b2.right >= b1.right && b2.bottom >= b1.bottom; if (c1 || c2) { var out = c1 ? b1 : b2, inn = c1 ? b2 : b1, ox = out.left + sx, oy = out.top + sy, ix = inn.left + sx, iy = inn.top + sy, icx = ix + inn.width / 2, icy = iy + inn.height / 2, td = Math.round(inn.top - out.top), bd = Math.round(out.bottom - inn.bottom), ld = Math.round(inn.left - out.left), rd = Math.round(out.right - inn.right); var ww = window.innerWidth, wh = window.innerHeight, cl = function (v, m, M) { return v < m ? m : v > M ? M : v }, clx = cl((ox + ix) / 2, sx + 24, sx + ww - 24), cly = cl(icy, sy + 14, sy + wh - 14), crx = cl((ix + inn.width + ox + out.width) / 2, sx + 24, sx + ww - 24), ctx = cl(icx, sx + 24, sx + ww - 24), cty = cl((oy + iy) / 2, sy + 14, sy + wh - 14), cby = cl((iy + inn.height + oy + out.height) / 2, sy + 14, sy + wh - 14); h += '<svg style="position:absolute;top:0;left:0;width:100%;height:100%;overflow:visible"><line x1="' + ox + '" y1="' + icy + '" x2="' + ix + '" y2="' + icy + '" stroke="#10b981" stroke-width="1" stroke-dasharray="4,3"/><rect x="' + (clx - 16) + '" y="' + (cly - 10) + '" width="32" height="20" rx="4" fill="#10b981"/><text x="' + clx + '" y="' + (cly + 5) + '" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="monospace">' + ld + '</text><line x1="' + (ix + inn.width) + '" y1="' + icy + '" x2="' + (ox + out.width) + '" y2="' + icy + '" stroke="#10b981" stroke-width="1" stroke-dasharray="4,3"/><rect x="' + (crx - 16) + '" y="' + (cly - 10) + '" width="32" height="20" rx="4" fill="#10b981"/><text x="' + crx + '" y="' + (cly + 5) + '" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="monospace">' + rd + '</text><line x1="' + icx + '" y1="' + oy + '" x2="' + icx + '" y2="' + iy + '" stroke="#10b981" stroke-width="1" stroke-dasharray="4,3"/><rect x="' + (ctx - 16) + '" y="' + (cty - 10) + '" width="32" height="20" rx="4" fill="#10b981"/><text x="' + ctx + '" y="' + (cty + 5) + '" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="monospace">' + td + '</text><line x1="' + icx + '" y1="' + (iy + inn.height) + '" x2="' + icx + '" y2="' + (oy + out.height) + '" stroke="#10b981" stroke-width="1" stroke-dasharray="4,3"/><rect x="' + (ctx - 16) + '" y="' + (cby - 10) + '" width="32" height="20" rx="4" fill="#10b981"/><text x="' + ctx + '" y="' + (cby + 5) + '" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="monospace">' + bd + '</text></svg>' } else { var l = b1.left < b2.left ? b1 : b2, R = b1.left < b2.left ? b2 : b1, t = b1.top < b2.top ? b1 : b2, B = b1.top < b2.top ? b2 : b1, hx = l.right + sx, hy = Math.max(l.bottom, R.bottom) + 15 + sy, hx2 = R.left + sx, vx = Math.max(l.right, R.right) + 15 + sx, vy = t.bottom + sy, vy2 = B.top + sy; var ww = window.innerWidth, wh = window.innerHeight, cl = function (v, m, M) { return v < m ? m : v > M ? M : v }, chx = cl((hx + hx2) / 2, sx + 24, sx + ww - 24), chy = cl(hy, sy + 14, sy + wh - 14), cvx = cl(vx, sx + 24, sx + ww - 24), cvy = cl((vy + vy2) / 2, sy + 14, sy + wh - 14); h += '<svg style="position:absolute;top:0;left:0;width:100%;height:100%;overflow:visible"><line x1="' + hx + '" y1="' + hy + '" x2="' + hx2 + '" y2="' + hy + '" stroke="#10b981" stroke-width="1" stroke-dasharray="4,3"/><rect x="' + (chx - 20) + '" y="' + (chy - 10) + '" width="40" height="20" rx="4" fill="#10b981"/><text x="' + (hx + hx2) / 2 + '" y="' + (chy + 5) + '" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="monospace">' + Math.round(R.left - l.right) + '</text><line x1="' + vx + '" y1="' + vy + '" x2="' + vx + '" y2="' + vy2 + '" stroke="#10b981" stroke-width="1" stroke-dasharray="4,3"/><rect x="' + (cvx - 20) + '" y="' + (cvy - 10) + '" width="40" height="20" rx="4" fill="#10b981"/><text x="' + vx + '" y="' + (cvy + 5) + '" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="monospace">' + Math.round(B.top - t.bottom) + '</text></svg>' } } c.innerHTML = h } document.addEventListener('mouseover', function (e) { var t = e.target.closest('[data-figma-node-id]'); f = f || function () { var d = document.createElement('div'); d.id = 'fdb'; d.style.cssText = 'position:absolute;pointer-events:none;z-index:99999;border:5px solid rgba(239,68,68,0.7);background:rgba(239,68,68,0.05)'; document.body.appendChild(d); return d }(); if (t === (f._el || null)) return; f._el = t; if (!t) { f.style.display = 'none'; return } var r = t.getBoundingClientRect(), sx = window.scrollX, sy = window.scrollY; f.style.display = 'block'; f.style.left = r.left + sx + 'px'; f.style.top = r.top + sy + 'px'; f.style.width = r.width + 'px'; f.style.height = r.height + 'px' }); document.addEventListener('mouseleave', function (e) { f && (f.style.display = 'none', f._el = null) }); document.addEventListener('click', function (e) { var t = e.target.closest('[data-figma-node-id]'); if (!t) return; var i = S.indexOf(t); if (i >= 0) { S.splice(i, 1); g(); return } S.push(t); g() }); document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && S.length) { S.pop(); g() } else if ((e.ctrlKey || e.metaKey) && e.key === 'c' && S.length) { e.preventDefault(); toast('Copied'); navigator.clipboard.writeText(S.map(x => x.outerHTML).join('')) } }) }();</script>
+
+
+</head>
+
+<body class="m-0 overflow-auto bg-[#f5f5f5] relative">
+  <div id="root"></div>
+  <script type="text/babel">
+    function Section0() {
+      function App() {
+        return (
+          <>
+            <div className="relative origin-top-left" style={{ width: 182, height: 50 }}>
+              <div className="absolute left-[0px] top-[0px] w-[182px] h-[50px] rounded-[8px]" style={{}} data-figma-node-id={"7885:1374"}>
+                <div className="absolute left-[24px] top-[13px] w-[134px] h-[24px]" style={{}} data-figma-node-id={"7885:1375"}>
+                  <div className="absolute left-[0px] top-[0px] w-[135px] h-[24px] text-[18px] font-[500] text-left leading-[24px] text-[rgba(2,_113,_232,_1)] [font-family:'Inter',_sans-serif]" style={{}} data-figma-node-id={"7885:1376"}>
+                    {"See Our Pricing"}
+                  </div>
+                </div>
+                <div className="absolute inset-0 pointer-events-none rounded-[8px] [border:1px_solid_rgba(2,_113,_232,_1)]" style={{}} />
+              </div>
+            </div>
+          </>
+        );
+      }
+      return <App />;
+    }
+
+    function App() {
+      return (
+        <>
+          <Section0 />
+        </>
+      );
+    }
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
 </body>
+
 </html>
