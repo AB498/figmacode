@@ -24,7 +24,7 @@ const authGuard = () => {
 const waitForResult = async (token, requestId, timeout = 120000) => {
   for (let ms = 0; ms < timeout; ms += 800) {
     await new Promise(r => setTimeout(r, 800));
-    process.stdout.write(".");
+    process.stderr.write(".");                                         // stderr is unbuffered
     const res = await client.query("action:getResult", { token, requestId });
     if (res) return res;
   }
@@ -57,6 +57,7 @@ const printHelp = () => {
   console.log("  generate <selection|url|node-id> [out]    Export design -> HTML/JSX (out .jsx/.tsx = component)");
   console.log("  pages                                     List all pages + top-level frames in the file");
   console.log("  tree [out.md]                             Generate a markdown sections grid with checkboxes");
+  console.log("  run <file> <json|gen|resp|all> [idx]      Run a pipeline stage for a section");
   console.log("  eval <code> [--out file]                  Run JS in the Figma sandbox, return JSON");
   console.log("  --help                                    Show this help");
   console.log("");
@@ -165,6 +166,75 @@ const enrichSectionTree = (node, rootBbox, depth = 0, maxDepth = 12) => {
   return [node.id, node.type, name, bbox, tc, kids, null];
 };
 const GEMINI_URL = "https://rare-newt-287.convex.site/gemini";
+const CC_CACHE = join(process.cwd(), ".cc-cache");
+
+const writeSectionsMd = (file, sections) => {
+  const raw = readFileSync(file, "utf-8");
+  const w = 30;
+  const pre = raw.replace(/<!-- tree:[\s\S]*$/s, `<!-- tree: ${JSON.stringify(sections)} -->\n\n`);
+  let md = pre;
+  md += `| ${"Section".padEnd(w)} | JSON | GEN | RESP |\n`;
+  md += `| ${"-".repeat(w)} | --- | --- | --- |\n`;
+  for (const s of sections) {
+    const lbl = s.label.replace(/\|/g, "&#124;").slice(0, w).padEnd(w);
+    const j = s.state.json ? "[x]" : "[ ]";
+    const g = s.state.gen ? "[x]" : "[ ]";
+    const r = s.state.resp ? "[x]" : "[ ]";
+    md += `| ${lbl} | ${j} | ${g} | ${r} |\n`;
+  }
+  writeFileSync(file, md);
+};
+
+const runStage = async (cfg, sections, idx, stage) => {
+  const s = sections[idx];
+  if (stage === "json") {
+    for (const nodeId of s.nodeIds || []) {
+      const code = `(async()=>{const n=await figma.getNodeByIdAsync('${nodeId}');if(!n)return null;return{id:n.id,name:n.name,type:n.type}})()`;
+      const { requestId } = await client.mutation("action:submit", { token: cfg.token, type: "eval", code });
+      process.stdout.write(".");
+      const content = await fetchResultJson(cfg.token, requestId);
+      if (!existsSync(CC_CACHE)) mkdirSync(CC_CACHE, { recursive: true });
+      const jsonPath = join(CC_CACHE, `${idx}.json`);
+      writeFileSync(jsonPath, JSON.stringify(content));
+      console.log(`\n[CC] Written ${jsonPath}`);
+    }
+    s.state.json = true;
+  }
+  if (stage === "gen") {
+    const htmls = [];
+    for (const nodeId of s.nodeIds || []) {
+      const { requestId } = await client.mutation("action:submit", { token: cfg.token, type: "generate", code: JSON.stringify({ nodeId, format: "react" }) });
+      process.stdout.write(".");
+      const html = await fetchResultText(cfg.token, requestId);
+      htmls.push(html);
+    }
+    if (!existsSync(CC_CACHE)) mkdirSync(CC_CACHE, { recursive: true });
+    const htmlPath = join(CC_CACHE, `${idx}.html`);
+    if (htmls.length === 1) writeFileSync(htmlPath, htmls[0]);
+    else {
+      const combined = htmls.length ? htmls.join("\n") : "";
+      writeFileSync(htmlPath, combined);
+    }
+    console.log(`\n[CC] Written ${htmlPath}`);
+    s.state.gen = true;
+  }
+  if (stage === "resp") {
+    const htmlPath = join(CC_CACHE, `${idx}.html`);
+    if (!existsSync(htmlPath)) throw new Error(`GEN not yet run for section ${idx} (missing ${htmlPath})`);
+    const html = readFileSync(htmlPath, "utf-8");
+    process.stdout.write(".");
+    const geminiRes = await fetch(GEMINI_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ mode: "responsive", html, renderMode: "react" }) });
+    if (!geminiRes.ok) { const txt = await geminiRes.text(); throw new Error(`Gemini ${geminiRes.status}: ${txt.slice(0, 200)}`); }
+    const rawText = await geminiRes.text();
+    const body = JSON.parse(rawText);
+    const inner = body.text || rawText;
+    const fenced = inner.replace(/^```(?:html|jsx|tsx|javascript|js)?\s*/i, "").replace(/```\s*$/i, "").trim();
+    const respPath = join(CC_CACHE, `${idx}-resp.html`);
+    writeFileSync(respPath, fenced || inner);
+    console.log(`\n[CC] Written ${respPath}`);
+    s.state.resp = true;
+  }
+};
 
 if (cmd === "tree") {
   const cfg = authGuard(); if (!cfg) process.exit(0);
@@ -183,7 +253,7 @@ if (cmd === "tree") {
     (function walk(n, p) {
       if (n?.id) {
         if (p) parentMap.set(n.id, p);
-        if (n?.children?.length) containerSet.add(n.id);
+        if (n?.children?.length && p === tree?.id) containerSet.add(n.id);
         nodeYMap.set(n.id, (n.absoluteBoundingBox?.y ?? n.y ?? 0));
         n.children?.forEach(c => walk(c, n.id));
       }
@@ -205,7 +275,7 @@ if (cmd === "tree") {
       for (const rawId of ids) {
         let cur = rawId;
         while (cur) {
-          if (cur === tree?.id || containerSet.has(cur)) {
+          if (cur === tree?.id) {
             if (!claimed.has(cur)) { claimed.add(cur); return { label: s.label, nodeIds: [cur] }; }
             break;
           }
@@ -218,11 +288,12 @@ if (cmd === "tree") {
     const sections = clean.length ? clean : (tree?.id ? [{ label: tree?.name || "Selection", nodeIds: [tree.id] }] : []);
     console.log(`\n[CC] ${sections.length} section(s)`);
 
-    let md = `# Sections Grid\n\nGenerated: ${new Date().toISOString().slice(0, 10)}\n\n`;
+    const data = sections.map(s => ({ label: s.label, nodeIds: s.nodeIds, state: { json: false, gen: false, resp: false } }));
     const w = 30;
+    let md = `# Sections Grid\n\nGenerated: ${new Date().toISOString().slice(0, 10)}\n\n<!-- tree: ${JSON.stringify(data)} -->\n\n`;
     md += `| ${"Section".padEnd(w)} | JSON | GEN | RESP |\n`;
     md += `| ${"-".repeat(w)} | --- | --- | --- |\n`;
-    for (const s of sections) {
+    for (const s of data) {
       const lbl = s.label.replace(/\|/g, "&#124;").slice(0, w).padEnd(w);
       md += `| ${lbl} | [ ] | [ ] | [ ] |\n`;
     }
@@ -230,6 +301,40 @@ if (cmd === "tree") {
     writeFileSync(outFile, md);
     console.log(`[CC] Written to ${outFile} (${sections.length} sections)`);
   } catch (e) { console.error("\n[CC] Sections failed:", e.message); process.exitCode = 1; }
+  process.exit(0);
+}
+
+if (cmd === "run") {
+  const cfg = authGuard(); if (!cfg) process.exit(0);
+  const sectionsFile = process.argv[3] ? process.argv[3] : "sections.md";
+  const sections = (() => {
+    const raw = readFileSync(sectionsFile, "utf-8");
+    const m = raw.match(/<!-- tree:\s*(\[.*?\])\s*-->/);
+    if (!m) throw new Error("No tree metadata in " + sectionsFile);
+    return JSON.parse(m[1]);
+  })();
+  const stage = process.argv[4];
+  const idx = parseInt(process.argv[5], 10);
+  if (stage === "all") {
+    for (let i = 0; i < sections.length; i++) {
+      for (const s of ["json", "gen", "resp"]) {
+        process.stdout.write(`\n[CC] Section ${i} ${s}`);
+        await runStage(cfg, sections, i, s);
+        process.stdout.write(" done");
+      }
+    }
+    writeSectionsMd(sectionsFile, sections);
+    console.log(`\n[CC] All sections complete`);
+    process.exit(0);
+  }
+  if (!["json", "gen", "resp"].includes(stage) || isNaN(idx) || idx < 0 || idx >= sections.length) {
+    console.error(`[CC] Usage: cc run <sections.md> <json|gen|resp|all> [index]`);
+    console.error(`[CC]        cc run <sections.md> all`);
+    process.exitCode = 1; process.exit(0);
+  }
+  await runStage(cfg, sections, idx, stage);
+  writeSectionsMd(sectionsFile, sections);
+  console.log(`[CC] Updated ${sectionsFile}`);
   process.exit(0);
 }
 
