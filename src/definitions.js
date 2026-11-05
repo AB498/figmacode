@@ -102,6 +102,35 @@ export const TOOL_DEFINITIONS = Object.freeze({
       required: Object.freeze(['code']),
     }),
   }),
+
+  figma_search: Object.freeze({
+    name: 'figma_search',
+    description: 'Searches nodes in the active Figma document by name or text content across all pages (or current page). Returns matched nodes with ID, name, type, text content, containing screen/frame, and bounds.',
+    inputSchema: Object.freeze({
+      type: 'object',
+      properties: Object.freeze({
+        query: Object.freeze({
+          type: 'string',
+          description: 'Text query to search for in layer names or text contents (case-insensitive).',
+        }),
+        type: Object.freeze({
+          type: 'string',
+          description: 'Optional filter by node type (e.g. "FRAME", "TEXT", "COMPONENT", "SECTION").',
+        }),
+        limit: Object.freeze({
+          type: 'number',
+          default: 20,
+          description: 'Maximum number of results to return (1-100, default 20).',
+        }),
+        allPages: Object.freeze({
+          type: 'boolean',
+          default: true,
+          description: 'Whether to search all pages in the document (true) or only the currently active page (false).',
+        }),
+      }),
+      required: Object.freeze(['query']),
+    }),
+  }),
 });
 
 /**
@@ -153,6 +182,23 @@ export function validateToolCall(toolName, rawArgs = {}) {
     if (!args.code || typeof args.code !== 'string') {
       throw new Error('figma_eval requires a non-empty "code" string argument');
     }
+    return args;
+  }
+
+  if (toolName === 'figma_search') {
+    if (!args.query || typeof args.query !== 'string' || !args.query.trim()) {
+      throw new Error('figma_search requires a non-empty "query" string argument');
+    }
+    args.query = String(args.query).trim();
+    if (args.type) args.type = String(args.type).trim().toUpperCase();
+    if (args.limit !== undefined) {
+      const lim = Number(args.limit);
+      if (!Number.isFinite(lim) || lim <= 0) throw new Error('figma_search "limit" must be a positive integer');
+      args.limit = Math.min(Math.floor(lim), 100);
+    } else {
+      args.limit = 20;
+    }
+    args.allPages = args.allPages !== undefined ? Boolean(args.allPages) : true;
     return args;
   }
 

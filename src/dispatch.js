@@ -59,6 +59,19 @@ export async function dispatchToolCall(bridge, toolName, rawArgs = {}) {
         };
       }
 
+      case 'figma_search': {
+        const matches = await bridge.search(args);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(matches ?? [], null, 2),
+            },
+          ],
+          isError: false,
+        };
+      }
+
       case 'figma_convert': {
         const { type, nodeId, media, graphics, outPath } = args;
         const def = CONVERT_TYPES[type];

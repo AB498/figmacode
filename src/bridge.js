@@ -157,6 +157,77 @@ export async function createFigmaBridge(opts = {}) {
     },
 
     /**
+     * Search nodes in active Figma document by query, layer type, with screen/bounds context.
+     */
+    async search({ query, type = null, limit = 20, allPages = true } = {}) {
+      const qStr = JSON.stringify(String(query).toLowerCase());
+      const tStr = JSON.stringify(type ? String(type).toUpperCase() : null);
+      const lNum = Math.min(Math.max(1, Number(limit) || 20), 100);
+      const apBool = allPages !== false;
+
+      const code = `(async () => {
+        const query = ${qStr};
+        const targetType = ${tStr};
+        const limit = ${lNum};
+        const allPages = ${apBool};
+
+        if (allPages) {
+          try { await figma.loadAllPagesAsync(); } catch (_) {}
+        }
+
+        function getScreen(node) {
+          let curr = node;
+          let top = null;
+          while (curr && curr.parent && curr.parent.type !== 'PAGE' && curr.parent.type !== 'DOCUMENT') {
+            curr = curr.parent;
+            if (curr.type === 'FRAME' || curr.type === 'COMPONENT' || curr.type === 'SECTION') {
+              top = curr;
+            }
+          }
+          return top ? { id: top.id, name: top.name, type: top.type } : null;
+        }
+
+        const pages = allPages ? figma.root.children.filter(p => p.type === 'PAGE') : [figma.currentPage];
+        const results = [];
+
+        for (const page of pages) {
+          if (results.length >= limit) break;
+          try {
+            if (typeof page.loadAsync === 'function') await page.loadAsync();
+          } catch (_) {}
+
+          const matches = page.findAll(n => {
+            if (targetType && n.type !== targetType) return false;
+            const nameMatch = n.name && n.name.toLowerCase().includes(query);
+            const textMatch = n.type === 'TEXT' && n.characters && n.characters.toLowerCase().includes(query);
+            return nameMatch || textMatch;
+          });
+
+          for (const m of matches) {
+            if (results.length >= limit) break;
+            results.push({
+              id: m.id,
+              name: m.name,
+              type: m.type,
+              text: m.type === 'TEXT' ? m.characters : undefined,
+              page: page.name,
+              screen: getScreen(m),
+              bounds: {
+                x: Math.round(m.x),
+                y: Math.round(m.y),
+                width: Math.round(m.width),
+                height: Math.round(m.height),
+              },
+            });
+          }
+        }
+
+        return results;
+      })()`;
+      return postEvalRecord({ code }, 60000);
+    },
+
+    /**
      * Close the realtime client connection.
      */
     async close() {

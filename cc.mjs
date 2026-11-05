@@ -77,11 +77,12 @@ if (argv[0] === 'mcp') {
   const isHtmlCmd = argv[0] === 'html';
   const isMediaCmd = argv[0] === 'media';
   const isShotCmd = argv[0] === 'screenshot' || argv[0] === 'snap';
+  const isSearchCmd = argv[0] === 'search' || argv[0] === 'find';
   const isStageCmd = isJsonCmd || isReactCmd || isHtmlCmd || isMediaCmd || isShotCmd;
   const withMedia = isMediaCmd || Boolean(opt.media);
   const isEvalCmd = argv[0] === 'eval';
   function usage() {
-    console.error('usage: [ACCESS_TOKEN=<jwt|cct_…>] figmacode (eval "<js>" | react | html | media | screenshot | json | mcp) [--node <id>] [--media] [--graphics vector|raster] [--out <path>] [--token <cct_...>] [--args \'{...\'}] [--timeout ms] [--url wss://...] [--delete] [--user <uid>]');
+    console.error('usage: [ACCESS_TOKEN=<jwt|cct_…>] figmacode (eval "<js>" | react | html | media | screenshot | json | search "<query>" | mcp) [--node <id>] [--media] [--graphics vector|raster] [--out <path>] [--token <cct_...>] [--args \'{...\'}] [--timeout ms] [--url wss://...] [--delete] [--user <uid>]');
     console.error('\nNo access token provided: set $env:ACCESS_TOKEN="cct_...", pass --token <token>, or enter it when prompted.');
     process.exit(2);
   }
@@ -89,7 +90,75 @@ if (argv[0] === 'mcp') {
   let CODE;
   let stageOut = null;
   let stageNodeId = null;
-  if (isStageCmd) {
+  let searchWord = null;
+  if (isSearchCmd) {
+    searchWord = argv[1] && !argv[1].startsWith('--') ? argv[1] : opt.query;
+    if (!searchWord) usage();
+    const qStr = JSON.stringify(String(searchWord).toLowerCase());
+    const tStr = JSON.stringify(opt.type ? String(opt.type).toUpperCase() : null);
+    const lNum = Math.min(Math.max(1, Number(opt.limit) || 20), 100);
+    const apBool = !opt['page-only'] && !opt.current;
+
+    CODE = `(async () => {
+      const query = ${qStr};
+      const targetType = ${tStr};
+      const limit = ${lNum};
+      const allPages = ${apBool};
+
+      if (allPages) {
+        try { await figma.loadAllPagesAsync(); } catch (_) {}
+      }
+
+      function getScreen(node) {
+        let curr = node;
+        let top = null;
+        while (curr && curr.parent && curr.parent.type !== 'PAGE' && curr.parent.type !== 'DOCUMENT') {
+          curr = curr.parent;
+          if (curr.type === 'FRAME' || curr.type === 'COMPONENT' || curr.type === 'SECTION') {
+            top = curr;
+          }
+        }
+        return top ? { id: top.id, name: top.name, type: top.type } : null;
+      }
+
+      const pages = allPages ? figma.root.children.filter(p => p.type === 'PAGE') : [figma.currentPage];
+      const results = [];
+
+      for (const page of pages) {
+        if (results.length >= limit) break;
+        try {
+          if (typeof page.loadAsync === 'function') await page.loadAsync();
+        } catch (_) {}
+
+        const matches = page.findAll(n => {
+          if (targetType && n.type !== targetType) return false;
+          const nameMatch = n.name && n.name.toLowerCase().includes(query);
+          const textMatch = n.type === 'TEXT' && n.characters && n.characters.toLowerCase().includes(query);
+          return nameMatch || textMatch;
+        });
+
+        for (const m of matches) {
+          if (results.length >= limit) break;
+          results.push({
+            id: m.id,
+            name: m.name,
+            type: m.type,
+            text: m.type === 'TEXT' ? m.characters : undefined,
+            page: page.name,
+            screen: getScreen(m),
+            bounds: {
+              x: Math.round(m.x),
+              y: Math.round(m.y),
+              width: Math.round(m.width),
+              height: Math.round(m.height),
+            },
+          });
+        }
+      }
+
+      return results;
+    })()`;
+  } else if (isStageCmd) {
     stageOut = typeof opt.out === 'string' ? opt.out : null;
     stageNodeId = typeof opt.node === 'string' ? opt.node : null;
     if (!stageOut) usage();
@@ -164,6 +233,31 @@ if (argv[0] === 'mcp') {
   if (result.error) {
     console.error(`[remote-eval] error: ${result.error}`);
     process.exit(1);
+  }
+  if (isSearchCmd) {
+    const list = Array.isArray(result.result) ? result.result : [];
+    if (opt.out) {
+      const outPath = resolve(opt.out);
+      mkdirSync(dirname(outPath), { recursive: true });
+      writeFileSync(outPath, JSON.stringify(list, null, 2));
+      console.log(outPath);
+      process.exit(0);
+    }
+    if (opt.json) {
+      console.log(JSON.stringify(list, null, 2));
+    } else {
+      if (!list.length) {
+        console.log(`No layers found matching "${searchWord}".`);
+      } else {
+        console.log(`Found ${list.length} layer(s) matching "${searchWord}":`);
+        for (const item of list) {
+          const screen = item.screen ? ` [Screen: ${item.screen.name} (${item.screen.id})]` : '';
+          const preview = item.text ? ` - "${item.text.replace(/\s+/g, ' ').slice(0, 50)}"` : '';
+          console.log(` • [${item.id}] ${item.name} <${item.type}> on "${item.page}"${screen}${preview}`);
+        }
+      }
+    }
+    process.exit(0);
   }
   if (isStageCmd) {
     const outPath = resolve(stageOut);
