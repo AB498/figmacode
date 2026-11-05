@@ -1,6 +1,6 @@
 {
   "name": "figmacode",
-  "version": "1.0.18",
+  "version": "1.0.19",
   "description": "CLI and MCP server to run eval code and convert designs in the CodeConvert Figma plugin via the realtime backend",
   "type": "module",
   "bin": {
