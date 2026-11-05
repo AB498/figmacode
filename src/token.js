@@ -3,7 +3,7 @@ import { createInterface } from 'node:readline/promises';
 import { stdin as input, stdout as output } from 'node:process';
 import { homedir } from 'node:os';
 import { join, dirname } from 'node:path';
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, unlinkSync } from 'node:fs';
 
 /**
  * Returns the default persistent file path for stored credentials.
@@ -36,9 +36,25 @@ export function readSavedToken(customPath = null) {
  */
 export function saveToken(token, customPath = null) {
   try {
+    if (!token || !String(token).trim()) return false;
     const p = customPath || getTokenPath();
     mkdirSync(dirname(p), { recursive: true });
     writeFileSync(p, String(token).trim() + '\n', 'utf8');
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Deletes any previously saved token from disk.
+ * @param {string} [customPath]
+ * @returns {boolean}
+ */
+export function deleteSavedToken(customPath = null) {
+  try {
+    const p = customPath || getTokenPath();
+    unlinkSync(p);
     return true;
   } catch {
     return false;

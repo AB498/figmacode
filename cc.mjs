@@ -23,7 +23,7 @@ import { randomUUID } from 'node:crypto';
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { RealtimeClient } from '@prsm/realtime/client';
-import { resolveToken } from './src/token.js';
+import { resolveToken, saveToken, deleteSavedToken } from './src/token.js';
 
 const ORIGIN = (process.env.ORIGIN_URL || 'https://codeconvert.cc').replace(/\/$/, '');
 
@@ -64,26 +64,69 @@ async function userIdFromToken(token, client = null) {
 // HTML render against. No remote-eval kind needed: it's a plain eval whose
 // result is a base64 PNG the CLI decodes to --out.
 
+function showHelp() {
+  console.log(`figmacode — CLI and MCP server for Figma to Code
+
+USAGE:
+  figmacode <command> [options]
+
+COMMANDS:
+  react                 Convert selection (or --node <id>) to React JSX with Tailwind CSS
+  html                  Generate standalone preview HTML document
+  screenshot, snap      Export pixel-accurate PNG render of selected node
+  json                  Export normalized Figma scene tree JSON
+  search <query>, find  Search layers across pages by name or text content
+  eval "<code>"         Evaluate arbitrary JavaScript in the Figma plugin sandbox
+  mcp                   Start the Model Context Protocol (MCP) stdio server
+
+OPTIONS:
+  --node <id>           Target Figma node ID (e.g. 12:345). Defaults to current selection
+  --out <path>          Output file path (required for react, html, json, screenshot)
+  --no-media            Disable image extraction & CDN upload (keeps inline data URIs)
+  --graphics <mode>     Graphics rendering mode: "vector" (SVG) or "raster" (retina PNG)
+  --type <type>         Filter by node type in search (FRAME, TEXT, COMPONENT, etc.)
+  --limit <n>           Max search results to return (default: 20)
+  --page-only, --current Limit search to current page only (default: all pages)
+  --token <cct_...>     CodeConvert Developer Access Token (saved automatically)
+  --timeout <ms>        Request timeout in ms (default: 60000)
+  --url <wss://...>     WebSocket endpoint (default: wss://codeconvert.cc)
+  --delete              Delete realtime eval record from server after completion
+  --help, -h            Show this help message
+
+EXAMPLES:
+  figmacode react --out ./Button.jsx
+  figmacode html --node 12:345 --out ./preview.html
+  figmacode screenshot --out ./screen.png
+  figmacode search "dropdown"
+  figmacode eval "figma.currentPage.name"
+  figmacode mcp
+`);
+  process.exit(0);
+}
+
 const argv = process.argv.slice(2);
 const opt = {};
 for (let i = 0; i < argv.length; i++) {
   if (argv[i].startsWith('--')) opt[argv[i].slice(2)] = argv[i + 1] && !argv[i + 1].startsWith('--') ? argv[++i] : true;
 }
+if (opt.help || opt.h || argv.length === 0 || argv[0] === 'help' || argv[0] === '--help' || argv[0] === '-h') {
+  showHelp();
+}
 if (argv[0] === 'mcp') {
   await import('./mcp.mjs');
 } else {
   const isJsonCmd = argv[0] === 'json';
-  const isReactCmd = argv[0] === 'react';
+  const isReactCmd = argv[0] === 'react' || argv[0] === 'media';
   const isHtmlCmd = argv[0] === 'html';
-  const isMediaCmd = argv[0] === 'media';
   const isShotCmd = argv[0] === 'screenshot' || argv[0] === 'snap';
   const isSearchCmd = argv[0] === 'search' || argv[0] === 'find';
-  const isStageCmd = isJsonCmd || isReactCmd || isHtmlCmd || isMediaCmd || isShotCmd;
-  const withMedia = isMediaCmd || Boolean(opt.media);
+  const isStageCmd = isJsonCmd || isReactCmd || isHtmlCmd || isShotCmd;
+  const withMedia = !opt['no-media'];
   const isEvalCmd = argv[0] === 'eval';
-  function usage() {
-    console.error('usage: [ACCESS_TOKEN=<jwt|cct_…>] figmacode (eval "<js>" | react | html | media | screenshot | json | search "<query>" | mcp) [--node <id>] [--media] [--graphics vector|raster] [--out <path>] [--token <cct_...>] [--args \'{...\'}] [--timeout ms] [--url wss://...] [--delete] [--user <uid>]');
-    console.error('\nNo access token provided: set $env:ACCESS_TOKEN="cct_...", pass --token <token>, or enter it when prompted.');
+    function usage(msg) {
+    if (msg) console.error(`Error: ${msg}\n`);
+    console.error('Usage: figmacode (eval "<code>" | react | html | screenshot | json | search "<query>" | mcp) [options]');
+    console.error('Run "figmacode --help" for detailed documentation and examples.');
     process.exit(2);
   }
   const cliUser = (opt.user || process.env.USER_ID || '').replace(/^user:/, '');
@@ -93,7 +136,7 @@ if (argv[0] === 'mcp') {
   let searchWord = null;
   if (isSearchCmd) {
     searchWord = argv[1] && !argv[1].startsWith('--') ? argv[1] : opt.query;
-    if (!searchWord) usage();
+    if (!searchWord) usage('Missing search query. Example: figmacode search "dropdown"');
     const qStr = JSON.stringify(String(searchWord).toLowerCase());
     const tStr = JSON.stringify(opt.type ? String(opt.type).toUpperCase() : null);
     const lNum = Math.min(Math.max(1, Number(opt.limit) || 20), 100);
@@ -161,7 +204,7 @@ if (argv[0] === 'mcp') {
   } else if (isStageCmd) {
     stageOut = typeof opt.out === 'string' ? opt.out : null;
     stageNodeId = typeof opt.node === 'string' ? opt.node : null;
-    if (!stageOut) usage();
+    if (!stageOut) usage(`Missing required --out flag for "${argv[0]}". Example: figmacode ${argv[0]} --out ./output`);
     if (isShotCmd) {
       // figma.exportAsync PNG of the node (or selection). nodeId embedded as a
       // literal — the plugin's host:eval handler ignores message.args.
@@ -176,20 +219,34 @@ if (argv[0] === 'mcp') {
     return { name: n.name, id: n.id, w: n.width, h: n.height, b64: btoa(bin) };
   })()`;
     } else {
-      CODE = (isHtmlCmd || isMediaCmd) ? 'presentationHtml' : isReactCmd ? 'generateHtml' : 'getNodeJson';
+      CODE = isHtmlCmd ? 'presentationHtml' : isReactCmd ? 'generateHtml' : 'getNodeJson';
     }
   } else {
     CODE = (isEvalCmd && !argv[1]?.startsWith('--') ? argv[1] : null) || opt.eval || opt.code;
-    if (!CODE) usage();
+    if (!CODE) usage('Command or JavaScript code required to evaluate.');
   }
   const cliToken = typeof opt.token === 'string' ? opt.token : null;
   const TOKEN = await resolveToken({ token: cliToken, interactive: true });
-  if (!TOKEN) usage();
+  if (!TOKEN) {
+    console.error('\nNo access token provided.');
+    console.error('Set $env:ACCESS_TOKEN="cct_...", pass --token <token>, or enter it when prompted.');
+    process.exit(2);
+  }
   const TIMEOUT = Number(opt.timeout || (isStageCmd ? 120000 : 60000));
   const WS_URL = (opt.url || ORIGIN.replace(/^http/, 'ws')).replace(/\/$/, '');
 
   const client = new RealtimeClient(`${WS_URL}?token=${encodeURIComponent(TOKEN)}`, { shouldReconnect: false });
-  await client.connect();
+  try {
+    await client.connect();
+    saveToken(TOKEN);
+  } catch (err) {
+    deleteSavedToken();
+    console.error(`\n[figmacode] Connection failed: unable to connect to ${WS_URL}`);
+    console.error(`Authentication was rejected or the server is unreachable (${err?.message || err}).`);
+    console.error(`Tip: Ensure the CodeConvert plugin is open in Figma, then copy a fresh Developer Token from its header menu:`);
+    console.error(`  figmacode --token "cct_..."\n`);
+    process.exit(1);
+  }
 
   // Identity: explicit --user wins, else JWT `sub`, else auth/me (short tokens).
   const USER_ID = cliUser || (await userIdFromToken(TOKEN, client));
@@ -200,8 +257,7 @@ if (argv[0] === 'mcp') {
     ? { nodeId: stageNodeId ? String(stageNodeId).replace(/-/g, ':') : null, media: withMedia, ...(graphicsOpt ? { graphics: graphicsOpt } : {}) }
     : (opt.args ? JSON.parse(opt.args) : undefined);
   const record = { id: recordId, status: 'pending', code: CODE, args, createdAt: Date.now() };
-  if (isMediaCmd) record.kind = 'mediaHtml';
-  else if (isHtmlCmd) record.kind = 'presentationHtml';
+  if (isHtmlCmd) record.kind = 'presentationHtml';
   else if (isReactCmd) record.kind = 'generateHtml';
   else if (isJsonCmd) record.kind = 'getNodeJson';
 

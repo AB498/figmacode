@@ -136,11 +136,11 @@ Rotate the short token at any time: `POST /api/token/rotate` (Bearer auth). The 
 ### Subcommands
 
 - `eval "<js>"` — evaluate JavaScript code in the open Figma plugin context.
-- `react` — raw `generateHtml` stage output: React component (JSX).
-- `html` — presentation stage output: component wrapped in `buildPresentationShell` (full HTML document).
-- `media` — `generateHtml` with optimized raster media and SVG defs.
+- `react` — React component (JSX with Tailwind CSS; media uploaded to CDN by default).
+- `html` — presentation stage output: component wrapped in `buildPresentationShell` (full standalone HTML document).
 - `screenshot` (or `snap`) — raster PNG screenshot of the node.
 - `json` — full Figma dump (`selection`, `nodes`, `captured_at`, `images`) for a node.
+- `search "<query>"` (or `find`) — search layers across pages by name or text content.
 - `mcp` — launch the stdio MCP server directly.
 
 ```sh

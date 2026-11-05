@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { rmSync } from 'node:fs';
-import { readSavedToken, saveToken, resolveToken } from '../src/token.js';
+import { readSavedToken, saveToken, deleteSavedToken, resolveToken } from '../src/token.js';
 
 describe('Token Resolution & Storage', () => {
   const testFile = join(tmpdir(), `figmacode-test-token-${Date.now()}.txt`);
@@ -17,6 +17,13 @@ describe('Token Resolution & Storage', () => {
     assert.equal(ok, true);
     assert.equal(readSavedToken(testFile), 'cct_test12345');
     rmSync(testFile, { force: true });
+  });
+
+  it('deleteSavedToken deletes existing token and returns true, or false if missing', () => {
+    saveToken('cct_to_delete', testFile);
+    assert.equal(deleteSavedToken(testFile), true);
+    assert.equal(readSavedToken(testFile), null);
+    assert.equal(deleteSavedToken(testFile), false);
   });
 
   it('resolveToken prioritizes explicit token argument', async () => {
@@ -56,4 +63,3 @@ describe('Token Resolution & Storage', () => {
     }
   });
 });
-

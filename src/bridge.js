@@ -4,7 +4,7 @@
 
 import { randomUUID } from 'node:crypto';
 import { RealtimeClient } from '@prsm/realtime/client';
-import { readSavedToken } from './token.js';
+import { readSavedToken, saveToken, deleteSavedToken } from './token.js';
 
 /**
  * Extract or resolve user ID from JWT token or via auth/me command.
@@ -46,7 +46,13 @@ export async function createFigmaBridge(opts = {}) {
   const timeoutMs = Number(opts.timeoutMs || 60000);
 
   const client = new RealtimeClient(`${wsUrl}?token=${encodeURIComponent(token)}`, { shouldReconnect: true });
-  await client.connect();
+  try {
+    await client.connect();
+    saveToken(token);
+  } catch (err) {
+    deleteSavedToken();
+    throw new Error(`FigmaBridge: Failed to connect to ${wsUrl} (${err?.message || err}). Your token may be expired or rejected — copy a fresh Developer Token from the CodeConvert plugin in Figma.`);
+  }
 
   const userId = (opts.userId || process.env.USER_ID || '').replace(/^user:/, '') || (await resolveUserId(token, client));
 
