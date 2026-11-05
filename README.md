@@ -1,10 +1,23 @@
 # figmacode
 
-CLI and Model Context Protocol (MCP) server to run eval code and convert Figma designs inside the CodeConvert Figma plugin via the realtime backend.
+<div align="center" style="text-align:center;font-family: monospace; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; width: 100%; gap: 10px; margin-bottom: 16px;">
+    <a href="https://www.figma.com/community/plugin/1618553111789925879/figma-to-code-free-ai-auto-html-code-converter"><img
+            src="https://img.shields.io/badge/Figma_Plugin-Free_Install-F24E1E?style=for-the-badge&logo=figma&logoColor=white" alt="Figma Plugin" /></a>
+    <a href="https://www.npmjs.com/package/figmacode"><img
+            src="https://img.shields.io/npm/v/figmacode?style=for-the-badge&color=CB3837&logo=npm" alt="npm version" /></a>
+    <a href="https://komarev.com/ghpvc/?username=AB498&label=VIEWS&style=for-the-badge&color=CC0000"><img
+            src="https://komarev.com/ghpvc/?username=AB498&label=VIEWS&style=for-the-badge&color=CC0000" alt="Views" /></a>
+    <a href="https://discord.gg/ZeeqSBpjU2"><img
+            src="https://img.shields.io/discord/1095854826786668545?style=for-the-badge&color=0000CC&logo=discord&logoColor=white" alt="Discord" /></a>
+    <a href="https://img.shields.io/badge/License-MIT-yellow.svg"><img
+            src="https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge&color=00CC00" alt="License: MIT" /></a>
+</div>
+
+CLI and Model Context Protocol (MCP) server to run eval code and convert Figma designs inside the [Figma to Code - Free AI Auto HTML Code Converter](https://www.figma.com/community/plugin/1618553111789925879/figma-to-code-free-ai-auto-html-code-converter) plugin via the realtime backend.
 
 A request is posted as a realtime record, the open plugin executes it in the Figma sandbox and writes the result back, and the CLI/MCP server yields the result.
 
-Requires the CodeConvert plugin to be **open** in Figma while requests execute.
+Requires the [Figma to Code](https://www.figma.com/community/plugin/1618553111789925879/figma-to-code-free-ai-auto-html-code-converter) plugin to be **open** in Figma while requests execute.
 
 ---
 
@@ -62,6 +75,7 @@ Runs the local CLI MCP server over standard I/O:
      - `outPath` (string) — Optional file path to save the generated code, HTML, JSON, or PNG image directly to disk.
 2. **`figma_get_selection`**: Inspects currently selected nodes in Figma (ID, name, bounds, type).
 3. **`figma_eval`**: Evaluates arbitrary JavaScript within the Figma Plugin sandbox (`figma.*` API).
+4. **`figma_search`**: Searches nodes across pages by name or text content (`query`, optional `type`, `limit`, `allPages`). Returns matching nodes with IDs, bounding boxes, screen context, and text.
 
 ### Testing with `mcp-caller`
 
