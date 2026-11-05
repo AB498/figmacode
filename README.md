@@ -14,7 +14,24 @@ Connect AI agents (Cursor, Claude Desktop, Antigravity, OpenCode, VS Code) direc
 
 ### Configuration (`.mcp.json` / Claude Desktop / Cursor)
 
-#### Using `npx`
+#### 1. Remote MCP (SSE Transport — Zero Local Install)
+
+Connects directly to the hosted CodeConvert realtime server via Server-Sent Events (SSE). Requires no local Node.js or `npx` runtime in your editor.
+
+```json
+{
+  "mcpServers": {
+    "figmacode": {
+      "type": "sse",
+      "url": "https://codeconvert.cc/mcp?token=cct_YOUR_ACCESS_TOKEN"
+    }
+  }
+}
+```
+
+#### 2. Local Stdio via `npx`
+
+Runs the local CLI MCP server over standard I/O:
 
 ```json
 {
@@ -22,22 +39,6 @@ Connect AI agents (Cursor, Claude Desktop, Antigravity, OpenCode, VS Code) direc
     "figmacode": {
       "command": "npx",
       "args": ["-y", "figmacode", "mcp"],
-      "env": {
-        "ACCESS_TOKEN": "cct_..."
-      }
-    }
-  }
-}
-```
-
-#### Local Development
-
-```json
-{
-  "mcpServers": {
-    "figmacode": {
-      "command": "node",
-      "args": ["/path/to/apps/figmacode/cc.mjs", "mcp"],
       "env": {
         "ACCESS_TOKEN": "cct_..."
       }
@@ -65,7 +66,11 @@ Connect AI agents (Cursor, Claude Desktop, Antigravity, OpenCode, VS Code) direc
 ### Testing with `mcp-caller`
 
 ```powershell
+# test local stdio
 npx -y mcp-caller --server-json '{"type":"stdio","command":"npx","args":["-y","figmacode","mcp"]}' --list-tools
+
+# test remote SSE
+npx -y mcp-caller --server-json '{"type":"sse","url":"https://codeconvert.cc/mcp?token=cct_..."}' --list-tools
 ```
 
 ---
