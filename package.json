@@ -1,26 +1,34 @@
 {
   "name": "figmacode",
-  "version": "1.0.9",
-  "description": "CLI to authenticate and run eval code via the CodeConvert Convex backend",
+  "version": "1.0.17",
+  "description": "CLI and MCP server to run eval code and convert designs in the CodeConvert Figma plugin via the realtime backend",
   "type": "module",
   "bin": {
     "figmacode": "cc.mjs",
     "cc": "cc.mjs",
-    "fc": "cc.mjs"
+    "fc": "cc.mjs",
+    "figmacode-mcp": "mcp.mjs"
+  },
+  "scripts": {
+    "test": "node --test test/**/*.test.js"
   },
   "files": [
-    "cc.mjs"
+    "cc.mjs",
+    "mcp.mjs",
+    "src"
   ],
   "keywords": [
     "cli",
+    "mcp",
+    "mcp-server",
     "codeconvert",
-    "convex",
+    "figma",
     "eval"
   ],
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "convex": "^1.17.0"
+    "@prsm/realtime": "^1.8.1"
   },
   "engines": {
     "node": ">=18"
